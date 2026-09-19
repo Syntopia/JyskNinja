@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {addWorkerEyes} from './worker-eyes.js?v=3';
 import {assetDownloadProgress} from './level-loading.js';
 import {GLTFLoader as ThreeGLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {MeshoptDecoder} from '../vendor/meshopt/meshopt_decoder.mjs';
@@ -42,7 +43,7 @@ export function prepareRuntimeGeometry(gltf){
 export class GLTFLoader extends ThreeGLTFLoader{
  constructor(manager){super(manager);this.setMeshoptDecoder(MeshoptDecoder);}
  load(url,onLoad,onProgress,onError){
-  return super.load(url,gltf=>{assetDownloadProgress(url,Infinity);onLoad?.(gltf)},event=>{assetDownloadProgress(url,event.loaded);onProgress?.(event)},onError);
+  return super.load(url,gltf=>{assetDownloadProgress(url,Infinity);const worker=/\/(craftsman|female-worker)\/retargeted\.glb(?:[?#]|$)/.exec(url)?.[1];addWorkerEyes(gltf,worker);onLoad?.(gltf)},event=>{assetDownloadProgress(url,event.loaded);onProgress?.(event)},onError);
  }
  parse(data,path,onLoad,onError){
   return super.parse(data,path,gltf=>{

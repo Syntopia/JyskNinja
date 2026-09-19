@@ -40,8 +40,8 @@ const loadModel=url=>modelCache.get(modelPath(url),()=>new GLTFLoader().loadAsyn
 async function readJSON(url){const response=await fetch(url);if(!response.ok)throw new Error(`Could not load ${url}: ${response.status}`);return response.json();}
 // Fictional campaign setting; shared by travel cards and direct scene entries.
 const sceneSettings={
- 'lantern-street':{year:2036,location:'Kyoto · Castle Quarter'},
- garden:{year:2036,location:'Kyoto · Japan'},
+ 'lantern-street':{year:1820,location:'Kyoto · Castle Quarter'},
+ garden:{year:1820,location:'Kyoto · Japan'},
  ferry:{year:2036,location:'Tsugaru Strait · Japan'},
  harbour:{year:2036,location:'Hakodate · Hokkaido'},
  shinkansen:{year:2036,location:'Shizuoka · Japan'}

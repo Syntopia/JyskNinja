@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {crowdEyeGeometry,workerEyeMaterial} from './worker-eyes.js?v=3';
 import {GLTFLoader} from './asset-loader.js';
 import {createCivilianFlock} from './civilian-flock.js';
 
@@ -63,7 +64,9 @@ objectTangent=mat3(crowdSkin)*objectTangent;
   const material=animate(walk.source.material.clone());
   const mesh=new T.InstancedMesh(geometry,material,capacity);mesh.name=asset.id+' • original geometry and textures';mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);mesh.frustumCulled=false;mesh.castShadow=true;mesh.receiveShadow=true;
   mesh.customDepthMaterial=animate(new T.MeshDepthMaterial({depthPacking:T.RGBADepthPacking}));root.add(mesh);
-  const batch={asset,type,walk,death,mesh,phase,fade,palette,paletteData,visible:0,shadowCount:0};
+  const eyeGeometry=crowdEyeGeometry(asset.id,walk.source);eyeGeometry.setAttribute('crowdRow',phase);eyeGeometry.setAttribute('crowdFade',fade);
+  const eyes=new T.InstancedMesh(eyeGeometry,animate(workerEyeMaterial(asset.id)),capacity);eyes.name=asset.id+' • eyes';eyes.userData.workerEyes=true;eyes.instanceMatrix=mesh.instanceMatrix;eyes.frustumCulled=false;root.add(eyes);
+  const batch={asset,type,walk,death,mesh,eyes,phase,fade,palette,paletteData,visible:0,shadowCount:0};
   // Keep full geometry for all visible workers. Limit expensive dynamic shadows
   // to the nearby crowd; instances are sorted by distance before uploading.
   mesh.onBeforeShadow=()=>{mesh.count=batch.shadowCount};mesh.onAfterShadow=()=>{mesh.count=batch.visible};
@@ -80,9 +83,9 @@ objectTangent=mat3(crowdSkin)*objectTangent;
     for(let j=0;j<stride;j++){const walking=batch.walk.data[offsetA+j]*(1-blend)+batch.walk.data[offsetB+j]*blend,dying=batch.death.data[deathA+j]*(1-deathBlend)+batch.death.data[deathB+j]*deathBlend;batch.paletteData[count*stride+j]=walking*(1-fallBlend)+dying*fallBlend;}
     batch.phase.setX(count,count);batch.fade.setX(count,Math.min(1,a.alive?(a.z-flock.bounds.minZ)/2:1,a.alive?(flock.bounds.maxZ-a.z)/2:1,(48-d)/5));count++;
    }
-   batch.visible=count;batch.shadowCount=shadowCount;batch.mesh.count=count;batch.mesh.instanceMatrix.needsUpdate=true;batch.phase.needsUpdate=true;batch.fade.needsUpdate=true;batch.palette.needsUpdate=true;
+   batch.visible=count;batch.shadowCount=shadowCount;batch.mesh.count=count;batch.eyes.count=count;batch.mesh.instanceMatrix.needsUpdate=true;batch.phase.needsUpdate=true;batch.fade.needsUpdate=true;batch.palette.needsUpdate=true;
   }
  }
  upload();
- return {mesh:root,flock,kill:flock.kill,fixed(dt,obstacles){flock.step(dt,obstacles)},update:upload,reset(){flock.reset();upload()},get stats(){return {...flock.stats,drawCalls:batches.length,carpenters:flock.agents.filter(a=>workerType(a)===0).length,femaleWorkers:flock.agents.filter(a=>workerType(a)===1).length,models:batches.map(b=>({id:b.asset.id,triangles:b.walk.triangles,visible:b.visible,shadowCount:b.shadowCount,originalGeometry:true})),renderedTriangles:batches.reduce((n,b)=>n+b.visible*b.walk.triangles,0)}},dispose(){for(const b of batches){b.mesh.geometry.dispose();b.mesh.material.dispose();b.mesh.customDepthMaterial.dispose();b.walk.texture.dispose();b.death.texture.dispose();b.palette.dispose()}root.removeFromParent()}};
+ return {mesh:root,flock,kill:flock.kill,fixed(dt,obstacles){flock.step(dt,obstacles)},update:upload,reset(){flock.reset();upload()},get stats(){return {...flock.stats,drawCalls:batches.length*2,carpenters:flock.agents.filter(a=>workerType(a)===0).length,femaleWorkers:flock.agents.filter(a=>workerType(a)===1).length,models:batches.map(b=>({id:b.asset.id,triangles:b.walk.triangles,visible:b.visible,shadowCount:b.shadowCount,originalGeometry:true})),renderedTriangles:batches.reduce((n,b)=>n+b.visible*(b.walk.triangles+b.eyes.geometry.index.count/3),0)}},dispose(){for(const b of batches){b.eyes.geometry.dispose();b.eyes.material.map.dispose();b.eyes.material.dispose();b.mesh.geometry.dispose();b.mesh.material.dispose();b.mesh.customDepthMaterial.dispose();b.walk.texture.dispose();b.death.texture.dispose();b.palette.dispose()}root.removeFromParent()}};
 }
