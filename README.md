@@ -6,15 +6,17 @@ A browser ninja game with five scenes: Rain Garden, Lantern Street, Night Ferry,
 
 ## Publish with GitHub Pages
 
-One-time setup:
+The repository also works with **Deploy from a branch → main → / (root)**: the root entry page opens the game in `docs/` automatically. This is the currently configured publishing method.
+
+To use the optional Actions workflow instead:
 
 1. Open **Settings → Pages** in this repository.
 2. Under **Build and deployment → Source**, choose **GitHub Actions**.
 3. Open **Actions → Deploy game to GitHub Pages → Run workflow**, using `main`.
 
-After setup, pushes that change `docs/` deploy automatically. The workflow publishes only `docs/`; no npm install or build step is required. If the initial workflow ran before Pages was enabled, rerun it after completing step 2.
+With GitHub Actions selected, pushes that change `docs/` deploy automatically. The workflow publishes only `docs/`; no npm install or build step is required. If the initial workflow ran before Pages was enabled, rerun it after completing step 2.
 
-The `docs/` layout also supports GitHub's branch-based publishing from `main` / `/docs` if preferred; use one publishing method at a time.
+Branch-based publishing also supports `main` / `/docs` to serve the game directly at the site root. Use one publishing method at a time.
 
 ## Local preview
 
