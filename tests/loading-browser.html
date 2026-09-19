@@ -1,0 +1,18 @@
+<!doctype html><meta charset="utf-8"><title>Demand loading verification</title>
+<style>body{background:#1c242c;color:#eee;font:13px system-ui}button{padding:8px;margin:3px}pre{max-height:90px;overflow:auto;white-space:pre-wrap}iframe{width:1100px;height:680px;border:0}</style>
+<button disabled data-wave="1">Garden</button><button disabled data-wave="2">Street</button><button disabled data-wave="3">Ferry</button><button disabled data-wave="4">Harbour</button><button disabled data-wave="5">Train</button><button disabled id="next">Next level</button>
+<pre id="result">Loading intro…</pre><iframe id="game-frame" allow="autoplay" src="../docs/index.html"></iframe>
+<script>
+const frame=document.querySelector('iframe'),out=document.querySelector('pre'),buttons=[...document.querySelectorAll('button')],checks={};let intro=false,target=null,history=[];
+if(new URLSearchParams(location.search).has('scene'))frame.src='../docs/index.html?scene='+new URLSearchParams(location.search).get('scene');
+function resources(){return frame.contentWindow.performance.getEntriesByType('resource').map(e=>new URL(e.name).pathname).filter(p=>p.endsWith('.glb')||p.endsWith('.webp'))}
+for(const button of buttons)button.onclick=()=>{const g=frame.contentWindow.gameDebug;g.player.hp=14;g.player.stamina=3;g.player.regenDelay=8;target=button.id==='next'?g.state.wave%5+1:+button.dataset.wave;history=[];buttons.forEach(b=>b.disabled=true);if(button.id==='next')frame.contentWindow.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyN'}));else g.beginTravel({targetWave:target});};
+function print(){out.textContent=JSON.stringify(checks,null,2)}
+setInterval(()=>{const w=frame.contentWindow,g=w.gameDebug,panel=frame.contentDocument.querySelector('#asset-loading');
+ if(panel&&!panel.classList.contains('hidden')){const text=panel.textContent;if(history.at(-1)!==text)history.push(text)}
+ if(g?.error||g?.loading?.phase==='error'){checks.error=g.error||g.loading;print();return}
+ if(!intro&&g?.ready){intro=true;checks.intro={state:g.loading,resources:resources()};buttons.forEach(b=>b.disabled=false);print()}
+ if(!g?.ready)return;g.holdEnemies(true);
+ if(target&&g.state.wave===target&&!g.transition){g.pause();frame.contentDocument.querySelector('#pause-menu').classList.add('hidden');checks[g.world.stage]={energy:[g.player.hp,g.player.stamina,g.player.regenDelay],state:g.loading,resources:resources(),history,street:g.world.stage==='lantern-street'?g.world.stageState:null};target=null;buttons.forEach(b=>b.disabled=false);print()}
+},80);
+</script>

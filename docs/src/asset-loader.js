@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {assetDownloadProgress} from './level-loading.js';
 import {GLTFLoader as ThreeGLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {MeshoptDecoder} from '../vendor/meshopt/meshopt_decoder.mjs';
 import {optimizedAssets} from './asset-map.js';
@@ -40,6 +41,9 @@ export function prepareRuntimeGeometry(gltf){
 
 export class GLTFLoader extends ThreeGLTFLoader{
  constructor(manager){super(manager);this.setMeshoptDecoder(MeshoptDecoder);}
+ load(url,onLoad,onProgress,onError){
+  return super.load(url,gltf=>{assetDownloadProgress(url,Infinity);onLoad?.(gltf)},event=>{assetDownloadProgress(url,event.loaded);onProgress?.(event)},onError);
+ }
  parse(data,path,onLoad,onError){
   return super.parse(data,path,gltf=>{
    try{onLoad(prepareRuntimeGeometry(gltf));}catch(error){if(onError)onError(error);else throw error;}

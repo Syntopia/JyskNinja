@@ -26,14 +26,32 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      # Branch-based Pages already deploys pushes. Avoid racing it with a second
+      # artifact that would change whether the public game lives at /docs/.
+      - name: Check publishing source
+        id: source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          source=$(gh api "repos/$GITHUB_REPOSITORY/pages" --jq .build_type)
+          if [ "$source" = "workflow" ]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+            echo "Branch-based Pages handles this deployment."
+          fi
       - name: Check out repository
+        if: steps.source.outputs.deploy == 'true'
         uses: actions/checkout@v6
       - name: Configure Pages
+        if: steps.source.outputs.deploy == 'true'
         uses: actions/configure-pages@v5
       - name: Upload game
+        if: steps.source.outputs.deploy == 'true'
         uses: actions/upload-pages-artifact@v4
         with:
           path: docs
       - name: Deploy
+        if: steps.source.outputs.deploy == 'true'
         id: deployment
         uses: actions/deploy-pages@v4

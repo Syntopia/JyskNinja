@@ -1,9 +1,11 @@
+import {INTRO_MODELS,LEVEL_MODELS,createResourceCache,restoreLevelEnergy,trackLoadingManager} from './level-loading.js';
+import {createLoadingUI,loadingPaint} from './loading-ui.js';
 import {createScreenshots} from './screenshot.js';
 import {blocksSword} from './civilian-combat.js';
 import {CAMPAIGN,CHAPTERS} from './campaign.js';
 import {loadLanternStreet} from './lantern-street-stage.js';
 import {createBridgeAmbush,AMBUSH_PERCHES} from './street-ambush.js';
-import {createSceneTransition,transitionBeat} from './scene-transition.js';
+import {createSceneTransition,transitionBeat,TRANSITION_SWITCH} from './scene-transition.js';
 import {createCombatAudio} from './combat-audio.js';
 import {nearestLadder,ladderRoute,beginLadder,cancelLadder,stepLadder} from './ladder-climb.js';
 import {createSearchlight} from './searchlight.js';
@@ -32,6 +34,10 @@ import {createCharacter} from './character.js';
 import {prepareArmedClips} from './warlord.js';
 import {V,moveBody,separateBodies,segmentDistance,segmentBox,sweptBlade} from './physics.js';
 const $=id=>document.getElementById(id),canvas=$('game');
+const loading=createLoadingUI(),assetRequests=trackLoadingManager(T.DefaultLoadingManager),modelCache=createResourceCache(),levelCache=createResourceCache(),preparedLevels=new Set();
+const modelPath=url=>url.replace(/^\.\//,'');
+const loadModel=url=>modelCache.get(modelPath(url),()=>new GLTFLoader().loadAsync('./'+modelPath(url)));
+async function readJSON(url){const response=await fetch(url);if(!response.ok)throw new Error(`Could not load ${url}: ${response.status}`);return response.json();}
 // Fictional campaign setting; shared by travel cards and direct scene entries.
 const sceneSettings={
  'lantern-street':{year:2036,location:'Kyoto · Castle Quarter'},
@@ -264,7 +270,7 @@ function prepareSearchlight(){
  searchlights.get('ferry').reset();searchlights.get('ferry').update(0,player,camera);
 }
 function spawnWave(){
- for(const e of enemies)disposeEnemy(e);enemies=[];wave++;
+ for(const e of enemies)disposeEnemy(e);enemies=[];wave++;restoreLevelEnergy(player);
  cancelClimb(player);cancelLadder(player);player.climbApproach=null;world.select(CAMPAIGN[wave-1].id);bridgeAmbush.reset();music.selectStage(world.stage);camPitch=world.stage==='ferry'?.015:world.stage==='harbour'?.16:world.stage==='shinkansen'?.24:world.stage==='lantern-street'?.16:.3;graphics.reset();storm.reset();impactFX.clear();impactPost.reset();player.pos.copy(world.spawn);if(world.stage==='shinkansen'){player.yaw=0;camYaw=Math.PI;camDistance=5.8;}else if(world.stage==='lantern-street'){player.yaw=Math.PI;camYaw=0;camDistance=4.8;}player.lastTrainSafe=null;player.vy=0;player.knock.set(0,0,0);player.grounded=true;player.previousBlade=null;player.invuln=1;enter(player,'idle');player.play('guard',mode==='transition'?0:.15);player.visual(0,camera);updateCamera(1);
  const count=world.stage==='shinkansen'?6:['ferry','lantern-street'].includes(world.stage)?4:3;
  for(let i=0;i<count;i++){
@@ -281,17 +287,17 @@ function spawnWave(){
  actors=[player,...enemies];for(const c of actors)c.setFabricWetness(world.stage==='ferry'?1:world.stage==='garden'?.35:0);const title=world.stageName;
  prepareSearchlight();banner(title,sceneSetting(world.stage),4.5);$('banner').classList.toggle('scene-intro',mode!=='transition');$('wave-title').textContent=CHAPTERS[wave-1]+' · '+title;document.querySelectorAll('.wave-marks i').forEach((n,i)=>n.classList.toggle('active',i<wave));
 }
-function reset({duringTravel=false,startWave=requestedChapter}={}){announcer.reset();clearTimeout(endTimer);endTimer=null;deathCinematic.reset();deathCameraTarget=null;cancelClimb(player);cancelLadder(player);player.climbApproach=null;clearRagdoll(player);accumulator=0;hitStop=0;clock.getDelta();impactPost.reset();graphics.reset();intro?.leave();storm.reset();impactFX.clear();restoreCharacter(player);for(const e of enemies)disposeEnemy(e);enemies=[];actors=[player];if(!duringTravel){travel=null;travelFX.finish();$('travel').classList.add('hidden')}$('banner').classList.remove('scene-intro');world.select('garden');player.setFabricWetness(.35);wave=startWave-1;kills=0;nextWave=-1;combo=0;lastHit=-10;simTime=0;world.reset();Object.keys(stats).forEach(k=>stats[k]=0);player.pos.set(0,0,8);player.yaw=Math.PI;player.vy=0;player.hp=100;player.stamina=100;player.alive=true;player.root.visible=true;player.invuln=1;player.knock.set(0,0,0);player.grounded=true;enter(player,'idle');player.play('guard',0);camYaw=.0;camPitch=.3;camDistance=5.8;mode=duringTravel?'transition':'playing';syncMusic();keys.clear();pressed.clear();mouse.block=false;$('menu').classList.add('hidden');$('pause-menu').classList.add('hidden');$('hud').classList.remove('hidden');$('combo').textContent='';if(!duringTravel&&matchMedia('(pointer:coarse)').matches)$('touch-controls').classList.remove('hidden');spawnWave();updateCamera(1)}
+function reset({duringTravel=false,startWave=requestedChapter}={}){if(!duringTravel&&!preparedLevels.has(CAMPAIGN[startWave-1]?.id))return beginTravel({targetWave:startWave,restart:true});announcer.reset();clearTimeout(endTimer);endTimer=null;deathCinematic.reset();deathCameraTarget=null;cancelClimb(player);cancelLadder(player);player.climbApproach=null;clearRagdoll(player);accumulator=0;hitStop=0;clock.getDelta();impactPost.reset();graphics.reset();intro?.leave();storm.reset();impactFX.clear();restoreCharacter(player);for(const e of enemies)disposeEnemy(e);enemies=[];actors=[player];if(!duringTravel){travel=null;travelFX.finish();$('travel').classList.add('hidden')}$('banner').classList.remove('scene-intro');player.setFabricWetness(.35);wave=startWave-1;kills=0;nextWave=-1;combo=0;lastHit=-10;simTime=0;world.reset();Object.keys(stats).forEach(k=>stats[k]=0);player.pos.set(0,0,8);player.yaw=Math.PI;player.vy=0;player.hp=100;player.stamina=100;player.alive=true;player.root.visible=true;player.invuln=1;player.knock.set(0,0,0);player.grounded=true;enter(player,'idle');player.play('guard',0);camYaw=.0;camPitch=.3;camDistance=5.8;mode=duringTravel?'transition':'playing';syncMusic();keys.clear();pressed.clear();mouse.block=false;$('menu').classList.add('hidden');$('pause-menu').classList.add('hidden');$('hud').classList.remove('hidden');$('combo').textContent='';if(!duringTravel&&matchMedia('(pointer:coarse)').matches)$('touch-controls').classList.remove('hidden');spawnWave();updateCamera(1)}
 function skipScene(){
  if(!ready||!player.alive||travel||!['playing','paused'].includes(mode))return;
  announcer.reset();beginTravel({targetWave:wave%CAMPAIGN.length+1});
 }
 function showingIntro(){return mode==='menu'||!!(travel?.fromIntro&&!travel.switched)}
-function beginTravel({targetWave=wave+1}={}){
+function beginTravel({targetWave=wave+1,restart=false}={}){
  const fromIntro=mode==='menu';
- if(!ready||travel||!player?.alive||(!fromIntro&&!['playing','paused'].includes(mode))||targetWave<1||targetWave>CAMPAIGN.length)return;
+ if(!ready||travel||(!player?.alive&&!restart)||(!fromIntro&&!restart&&!['playing','paused'].includes(mode))||targetWave<1||targetWave>CAMPAIGN.length)return;
  const returnPaused=mode==='paused';
- travel={elapsed:0,switched:false,targetWave,returnPaused,fromIntro};mode='transition';nextWave=-1;resumeMode='playing';
+ travel={elapsed:0,switched:false,targetWave,returnPaused,fromIntro,restart,assetsReady:false,prepared:false,preparing:false,error:false};mode='transition';nextWave=-1;resumeMode='playing';
  keys.clear();pressed.clear();mouse.block=false;accumulator=0;hitStop=0;shake=0;
  $('menu').classList.add('hidden');$('pause-menu').classList.add('hidden');$('touch-controls').classList.add('hidden');
  $('banner').style.opacity=0;bannerUntil=0;
@@ -300,12 +306,46 @@ function beginTravel({targetWave=wave+1}={}){
  $('travel-setting').textContent=sceneSetting(kind);
  $('travel-copy').textContent=CHAPTERS[targetWave-1]+' · '+chapter.arrival;
  $('travel').classList.remove('hidden');$('travel').style.opacity=0;travelFX.begin(targetWave);syncMusic();
+ const job=travel;assetRequests.clearErrors();loading.begin(`Loading ${chapter.title}`,preparedLevels.has(kind)?[]:LEVEL_MODELS[kind].filter(path=>!modelCache.has(path)));
+ if(preparedLevels.has(kind))loading.prepare('Preparing scene');
+ loadLevel(kind).then(()=>{if(travel===job)job.assetsReady=true}).catch(error=>{if(travel===job){job.error=true;loading.fail(error)}});
+}
+function loadLevel(kind){
+ return levelCache.get(kind,async()=>{
+  if(kind==='garden'){
+   const kit=await loadModel('assets/environment-kit.glb');
+   loading.prepare('Preparing garden textures');await loadingPaint();world.assetInfo=world.installProps(kit.scene);
+  }else if(kind==='lantern-street'){
+   const resources=await loadLanternStreet({loadAsync:loadModel});world.installStreet(resources);
+  }else{
+   const actor={ferry:'warlord',harbour:'samurai',shinkansen:'imported-ninja'}[kind];
+   const file={ferry:'ferry-refined',harbour:'harbour-refined',shinkansen:'shinkansen'}[kind];
+   const [kit,gltf,rig]=await Promise.all([loadModel(`assets/${file}.glb`),loadModel(`assets/${actor}/retargeted.glb`),readJSON(`./assets/${actor}/manifest.json`)]);
+   const animation=prepareArmedClips(gltf.animations,rig);world.installVoyage({[kind]:kit.scene});
+   if(kind==='ferry'){warlordTemplate=gltf.scene;warlordRig=rig;warlordClips=animation;}
+   if(kind==='harbour'){samuraiTemplate=gltf.scene;samuraiRig=rig;samuraiClips=animation;}
+   if(kind==='shinkansen'){maskedTemplate=gltf.scene;maskedRig=rig;maskedClips=animation;}
+  }
+ });
+}
+async function prepareLevelTransition(job){
+ try{
+  loading.prepare('Preparing scene and textures');await loadingPaint();if(travel!==job)return;
+  job.switched=true;
+  if(job.fromIntro||job.restart)reset({duringTravel:true,startWave:job.targetWave});else{wave=job.targetWave-1;spawnWave();}
+  bannerUntil=0;$('banner').style.opacity=0;
+  await assetRequests.wait();storm.wetScene();
+  loading.prepare('Preparing lighting and shaders');await loadingPaint();
+  updateCamera(1);updateStageLighting(true);await renderer.compileAsync(scene,camera);
+  if(travel!==job)return;
+  preparedLevels.add(CAMPAIGN[job.targetWave-1].id);job.prepared=true;loading.finish();travelFX.requestIncoming();
+ }catch(error){if(travel===job){job.error=true;loading.fail(error)}}
 }
 function updateTravel(dt){
  if(!travel||document.hidden)return;
- if(travelFX.state.oldReady)travel.elapsed+=Math.min(dt,.1);
+ if(travelFX.state.oldReady){travel.elapsed+=Math.min(dt,.1);if(!travel.prepared)travel.elapsed=Math.min(travel.elapsed,TRANSITION_SWITCH);}
  const beat=transitionBeat(travel.elapsed);$('travel').style.opacity=beat.text;
- if(beat.switchScene&&!travel.switched){travel.switched=true;if(travel.fromIntro)reset({duringTravel:true,startWave:travel.targetWave});else{wave=travel.targetWave-1;spawnWave()}bannerUntil=0;$('banner').style.opacity=0;travelFX.requestIncoming()}
+ if(beat.switchScene&&travel.assetsReady&&!travel.preparing&&!travel.error){travel.preparing=true;prepareLevelTransition(travel);}
  if(beat.done){
   const returnPaused=travel.returnPaused;travel=null;travelFX.finish();mode='playing';clock.getDelta();accumulator=0;
   $('travel').classList.add('hidden');player.invuln=Math.max(player.invuln,1);
@@ -321,7 +361,7 @@ function enterPlayDisplay(){
  const root=document.documentElement,request=root.requestFullscreen||root.webkitRequestFullscreen;
  if(request)try{request.call(root)?.catch(()=>{})}catch{}
 }
-function pause(){if(!['playing','transition'].includes(mode))return;resumeMode=mode;mode='paused';if(travel)$('travel').classList.add('hidden');syncMusic();keys.clear();pressed.clear();mouse.block=false;if(document.pointerLockElement)document.exitPointerLock();$('pause-title').textContent='Paused';$('pause-copy').textContent='';$('resume').classList.remove('hidden');$('pause-menu').classList.remove('hidden');$('touch-controls').classList.add('hidden')}
+function pause(){if(loading.state.phase!=='ready'||!['playing','transition'].includes(mode))return;resumeMode=mode;mode='paused';if(travel)$('travel').classList.add('hidden');syncMusic();keys.clear();pressed.clear();mouse.block=false;if(document.pointerLockElement)document.exitPointerLock();$('pause-title').textContent='Paused';$('pause-copy').textContent='';$('resume').classList.remove('hidden');$('pause-menu').classList.remove('hidden');$('touch-controls').classList.add('hidden')}
 function resume(){if(mode!=='paused')return;mode=resumeMode;if(travel)$('travel').classList.remove('hidden');clock.getDelta();syncMusic();$('pause-menu').classList.add('hidden');if(matchMedia('(pointer:coarse)').matches)$('touch-controls').classList.remove('hidden');enterPlayDisplay()}
 function endRun(win){
  if(mode==='won'||mode==='dead')return;
@@ -375,7 +415,7 @@ let touchLast=null;canvas.addEventListener('touchstart',e=>{touchLast={x:e.touch
 window.addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);storm.resize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();cameraFX.resize()});renderer.setSize(innerWidth,innerHeight);cameraFX.resize();
 // Each location gets its own reflection capture and warm/cool lighting balance.
 const stageEnvironments=new Map();let litStage=null;
-function updateStageLighting(){
+function updateStageLighting(force=false){
  if(showingIntro()){renderer.toneMappingExposure=1.05;return;}
  const stage=world.stage,menu=showingIntro(),harbour=stage==='harbour',ferry=stage==='ferry',train=stage==='shinkansen',street=stage==='lantern-street';
  renderer.toneMappingExposure=menu?1.05:street?1.15:train?1.05:harbour?1.16:ferry?1.16:1.22;
@@ -385,7 +425,7 @@ function updateStageLighting(){
  fill.color.setHex(harbour?0xa4caff:0xf6d2aa);fill.intensity=menu?.45:street?.4:harbour?.85:ferry?.72:1.0;
  scene.environmentIntensity=menu?.4:train?.65:harbour?.48:ferry?.30:.52;
  if((train||street)&&player){moonlight.position.set(player.pos.x+(street?-16:18),25,player.pos.z-(street?12:28));moonlight.target.position.set(player.pos.x,0,player.pos.z);moonlight.target.updateMatrixWorld()}else if(litStage!==stage){moonlight.target.position.set(0,0,0);moonlight.target.updateMatrixWorld()}
- if(!ready||litStage===stage)return;litStage=stage;camera.far=train?460:220;camera.updateProjectionMatrix();moonlight.position.set(train?18:harbour?-18:-16,train?25:harbour?22:25,train?-28:harbour?9:-12);
+ if(!ready||(!force&&loading.state.phase!=='ready')||litStage===stage)return;litStage=stage;camera.far=train?460:220;camera.updateProjectionMatrix();moonlight.position.set(train?18:harbour?-18:-16,train?25:harbour?22:25,train?-28:harbour?9:-12);
  if(stageEnvironments.has(stage)){scene.environment=stageEnvironments.get(stage);return}
  const hidden=[];scene.traverse(o=>{if(o.visible&&(o.isPoints||o.isReflector||o===world.water||o.userData.noReflectionCapture)){hidden.push(o);o.visible=false}});
  for(const a of actors)if(a.root.visible){hidden.push(a.root);a.root.visible=false}
@@ -394,8 +434,10 @@ function updateStageLighting(){
  try{probe.update(renderer,scene);const env=pmrem.fromCubemap(target.texture).texture;env.name=stage+' local reflections';stageEnvironments.set(stage,env);scene.environment=env}
  finally{for(const o of hidden)o.visible=true;target.dispose();pmrem.dispose();if(!scene.environment)scene.environment=previous}
 }
-async function init(){try{const [g,data,kit,mech,ferryKit,harbourKit,trainKit,warlord,warlordManifest,samurai,samuraiManifest,masked,maskedManifest,streetResources]=await Promise.all([new GLTFLoader().loadAsync('./assets/ninja-game.glb',p=>{$('load-status').textContent=p.total?`Loading your ninja · ${Math.round(p.loaded/p.total*100)}%`:'Loading your ninja'}),fetch('./assets/motions.json').then(r=>r.json()),new GLTFLoader().loadAsync('./assets/environment-kit.glb'),new GLTFLoader().loadAsync('./assets/mech-boss.glb'),new GLTFLoader().loadAsync('./assets/ferry-refined.glb'),new GLTFLoader().loadAsync('./assets/harbour-refined.glb'),new GLTFLoader().loadAsync('./assets/shinkansen.glb'),new GLTFLoader().loadAsync('./assets/warlord/retargeted.glb'),fetch('./assets/warlord/manifest.json').then(r=>{if(!r.ok)throw new Error('Warlord manifest failed to load');return r.json()}),new GLTFLoader().loadAsync('./assets/samurai/retargeted.glb'),fetch('./assets/samurai/manifest.json').then(r=>{if(!r.ok)throw new Error('Samurai manifest failed to load');return r.json()}),new GLTFLoader().loadAsync('./assets/imported-ninja/retargeted.glb'),fetch('./assets/imported-ninja/manifest.json').then(r=>{if(!r.ok)throw new Error('Masked Ninja manifest failed to load');return r.json()}),loadLanternStreet(new GLTFLoader())]);world.installStreet(streetResources);warlordTemplate=warlord.scene;warlordRig=warlordManifest;warlordClips=prepareArmedClips(warlord.animations,warlordRig);samuraiTemplate=samurai.scene;samuraiRig=samuraiManifest;samuraiClips=prepareArmedClips(samurai.animations,samuraiRig);maskedTemplate=masked.scene;maskedRig=maskedManifest;maskedClips=prepareArmedClips(masked.animations,maskedRig);world.installVoyage({ferry:ferryKit.scene,harbour:harbourKit.scene,shinkansen:trainKit.scene});bossTemplate=mech.scene;world.assetInfo=world.installProps(kit.scene);storm.wetScene();
-const captureTarget=new T.WebGLCubeRenderTarget(128,{type:T.HalfFloatType});const captureCamera=new T.CubeCamera(.1,160,captureTarget);captureCamera.position.set(0,3,-1);world.water.visible=false;captureCamera.update(renderer,scene);world.water.visible=true;const pmrem=new T.PMREMGenerator(renderer);scene.environment=pmrem.fromCubemap(captureTarget.texture).texture;scene.environmentIntensity=.40;stageEnvironments.set('garden',scene.environment);captureTarget.dispose();pmrem.dispose();
-template=g.scene;clips={};for(const dataClip of data.clips){const c=T.AnimationClip.parse(dataClip);for(const tr of c.tracks)if(tr.name==='pelvis.position'){for(let i=0;i<tr.values.length;i+=3){tr.values[i]=tr.values[0];tr.values[i+2]=tr.values[2]}}clips[c.name]=c}player=createCharacter(template,clips,scene);player.pos.set(0,0,8);player.yaw=0;actors=[player];intro=createIntro(camera,storm,(studio,kind)=>createCharacter(kind==='cyborg'?bossTemplate:template,clips,studio,{enemy:kind!=='hero',boss:kind==='cyborg',color:0x253d37,name:'Intro '+kind}),sound);await intro.loaded;await combatAudio.loaded;await renderer.compileAsync(intro.scene,camera);intro.start();ready=true;$('start').disabled=false;$('start').innerHTML=(requestedChapter===2?'Play Lantern Street':'Play')+' <span>↗</span>';$('load-status').textContent='';window.gameDebug={announcer,combatAudio,searchlightVolume,get searchlight(){return searchlights.get(world.stage)},get deathCinematic(){return deathCinematic.state},get intro(){return intro},get ready(){return ready},get mode(){return mode},get player(){return player},get enemies(){return enemies},world,camera,renderer,scene,cameraFX,stats,impactFX,storm,music,graphics,impactPost,slash,dodge,jump,pause,resume,reset,setKeys:codes=>{keys.clear();codes.forEach(k=>keys.add(k))},press:code=>pressed.add(code),step:dt=>fixed(dt),spawnWave,beginTravel,get transition(){return travel?{...travel,...travelFX.state}:null},get state(){return {mode,stage:world.stage,wave,kills,health:player.hp,stamina:player.stamina,position:player.pos.toArray(),state:player.state,grounded:player.grounded,enemies:enemies.map(e=>({name:e.name,boss:e.boss,phase:e.phase,bossMove:e.bossMove,severed:[...e.severed],profile:e.profile,gait:e.gait,hp:e.hp,state:e.state,position:e.pos.toArray(),alive:e.alive})),stats:{...stats},drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles}},setPose(x,y,z,yaw=Math.PI){player.pos.set(x,y,z);player.yaw=yaw;player.visual(0,camera)},holdEnemies(value=true){for(const e of enemies)e.aiHold=value},attack:heavy=>slash(player,heavy)};}catch(e){console.error(e);$('load-status').textContent='Could not load the game. Start the local server, then reload.';$('start').textContent='Load failed';window.gameDebug={ready:false,error:String(e)}}}
+async function init(){try{
+loading.begin('Loading intro',INTRO_MODELS);await loadingPaint();
+const [g,data,mech]=await Promise.all([loadModel('assets/ninja-game.glb'),readJSON('./assets/motions.json'),loadModel('assets/mech-boss.glb')]);bossTemplate=mech.scene;
+loading.prepare('Preparing intro and audio');await loadingPaint();
+template=g.scene;clips={};for(const dataClip of data.clips){const c=T.AnimationClip.parse(dataClip);for(const tr of c.tracks)if(tr.name==='pelvis.position'){for(let i=0;i<tr.values.length;i+=3){tr.values[i]=tr.values[0];tr.values[i+2]=tr.values[2]}}clips[c.name]=c}player=createCharacter(template,clips,scene);player.pos.set(0,0,8);player.yaw=0;actors=[player];intro=createIntro(camera,storm,(studio,kind)=>createCharacter(kind==='cyborg'?bossTemplate:template,clips,studio,{enemy:kind!=='hero',boss:kind==='cyborg',color:0x253d37,name:'Intro '+kind}),sound);await intro.loaded;await combatAudio.loaded;await assetRequests.wait();loading.prepare('Preparing intro lighting and shaders');await loadingPaint();await renderer.compileAsync(intro.scene,camera);intro.start();ready=true;loading.finish();$('start').disabled=false;$('start').innerHTML=(requestedChapter===2?'Play Lantern Street':'Play')+' <span>↗</span>';$('load-status').textContent='';window.gameDebug={get loading(){return {...loading.state,pending:assetRequests.pending,preparedLevels:[...preparedLevels]}},announcer,combatAudio,searchlightVolume,get searchlight(){return searchlights.get(world.stage)},get deathCinematic(){return deathCinematic.state},get intro(){return intro},get ready(){return ready},get mode(){return mode},get player(){return player},get enemies(){return enemies},world,camera,renderer,scene,cameraFX,stats,impactFX,storm,music,graphics,impactPost,slash,dodge,jump,pause,resume,reset,setKeys:codes=>{keys.clear();codes.forEach(k=>keys.add(k))},press:code=>pressed.add(code),step:dt=>fixed(dt),spawnWave,beginTravel,get transition(){return travel?{...travel,...travelFX.state}:null},get state(){return {mode,stage:world.stage,wave,kills,health:player.hp,stamina:player.stamina,position:player.pos.toArray(),state:player.state,grounded:player.grounded,enemies:enemies.map(e=>({name:e.name,boss:e.boss,phase:e.phase,bossMove:e.bossMove,severed:[...e.severed],profile:e.profile,gait:e.gait,hp:e.hp,state:e.state,position:e.pos.toArray(),alive:e.alive})),stats:{...stats},drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles}},setPose(x,y,z,yaw=Math.PI){player.pos.set(x,y,z);player.yaw=yaw;player.visual(0,camera)},holdEnemies(value=true){for(const e of enemies)e.aiHold=value},attack:heavy=>slash(player,heavy)};}catch(e){loading.fail(e);$('load-status').textContent='Could not load the intro. Reload to try again.';$('start').textContent='Load failed';window.gameDebug={ready:false,error:String(e)}}}
 let fpsFrames=0,fpsStart=performance.now();document.addEventListener('visibilitychange',()=>{fpsStart=performance.now();fpsFrames=0});
 renderer.setAnimationLoop(()=>{const now=performance.now();fpsFrames++;if(now-fpsStart>=500){$('fps').textContent=Math.round(fpsFrames*1000/(now-fpsStart))+' FPS';fpsFrames=0;fpsStart=now;canvas.dataset.gameState=JSON.stringify({mode,stage:world.stage,wave,position:player?.pos.toArray(),enemies:enemies.map(e=>({ambush:e.ambush,alive:e.alive,y:e.pos.y,state:e.state})),ambush:bridgeAmbush.stats,street:world.stage==='lantern-street'?world.stageState:null,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles})}const realDt=clock.getDelta();music.update(realDt);deathCinematic.update(document.hidden?0:realDt);let dt=Math.min(realDt,.08)*deathCinematic.timeScale;if(mode==='playing'||mode==='dead'){if(hitStop>0){hitStop-=dt;dt*=.18}accumulator+=dt;while(accumulator>=1/60&&(mode==='playing'||mode==='dead')){fixed(1/60);accumulator-=1/60}effects(dt);world.update(simTime,dt);}else if(mode==='transition'){updateTravel(realDt);}else if(mode==='menu'){intro?.update(dt)}else if(mode==='won'){for(const c of actors){if(c.ragdoll&&c.root.visible)c.ragdoll.step(dt);c.visual(dt,camera)}effects(dt)}if(mode==='playing'||mode==='dead')for(const c of actors)if(c.ragdoll&&c.root.visible)c.ragdoll.apply(Math.min(1,accumulator*60));updateCamera(dt);if(world.stage==='ferry')searchlights.get('ferry')?.update(['playing','dead'].includes(mode)?dt:0,player,camera);updateStageLighting();impactPost.update(dt,mode);document.body.dataset.mode=mode;storm.setActive(mode!=='menu'&&mode!=='paused'&&mode!=='transition'&&!document.hidden);storm.update(mode==='paused'||mode==='transition'?0:dt);graphics.update(dt,actors,mode==='transition'?'paused':mode);hud();cameraFX.update(Math.min(realDt,.25),mode);renderPass.scene=showingIntro()?(intro?.scene||loadingScene):scene;searchlightVolume.configure(searchlights.get('ferry'),world.stage==='ferry'&&mode!=='menu'&&mode!=='transition');renderer.info.reset();composer.render(dt);travelFX.frame(canvas,travel?.elapsed||0,mode==='transition');screenshots.afterFrame()});init();

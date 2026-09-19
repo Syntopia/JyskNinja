@@ -49,3 +49,16 @@ body:not([data-mode=menu]) #intro-fullscreen{display:none}
 #travel:before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at center,#08111de6 0%,#08111d9c 26%,#08111d10 60%,transparent 80%)}
 #travel>span{color:#e18c65}#travel h2{letter-spacing:.035em}#travel #travel-setting{color:#f1dfbe}
 body[data-mode=transition] #hud,body[data-mode=transition] #fx-toggle,body[data-mode=transition] #fps{visibility:hidden}
+
+/* Demand-loaded intro and chapter assets. Preparation has no fabricated percentage. */
+#asset-loading{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;padding:28px;background:#111c29f5;color:#eee6d7;text-align:center}
+#asset-loading .loading-mark{font:64px Georgia,serif;color:#db9673}
+#asset-loading h2{font:500 clamp(25px,4vw,42px)/1.2 Georgia,serif;margin:0 0 8px}
+#asset-loading progress{width:min(340px,80vw);height:6px;border:0;background:#eee6d726;accent-color:#d79470;border-radius:3px;overflow:hidden}
+#asset-loading progress::-webkit-progress-bar{background:#eee6d726}#asset-loading progress::-webkit-progress-value{background:#d79470}
+#asset-loading progress:not([value]){animation:loading-pulse 1s ease-in-out infinite alternate}
+#asset-loading p{font-size:12px;letter-spacing:.04em;max-width:360px;margin:0;color:#e3d5c5}
+#asset-loading button{margin-top:16px;justify-content:center}
+@keyframes loading-pulse{to{opacity:.35}}@media(prefers-reduced-motion:reduce){#asset-loading progress:not([value]){animation:none}}
+
+body[data-loading=true] #fx-toggle,body[data-loading=true] #fps{visibility:hidden}

@@ -11,7 +11,7 @@ import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import {V,boxAt} from './physics.js';
 import {texture,pbr,wind,planarUV} from './surface.js';
 import {createSceneryFade} from './camera.js';
-function buildGarden(scene){
+function buildGarden(scene,cameraFade){
  let seed=823;const rand=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
  const root=new T.Group();scene.add(root);const solids=[],breakables=[],lanterns=[],lights=[],replacements=[];const windTime={value:0};const materials={};
  function mat(name,color,roughness=.85,extra={}){return materials[name]??=(new T.MeshStandardMaterial({name,color,roughness,...extra}))}
@@ -126,7 +126,7 @@ function buildGarden(scene){
  // Small warm lights among the reeds, animated without additional point lights.
  const fireflyPositions=new Float32Array(54*3),fireflyGeo=new T.BufferGeometry();fireflyGeo.setAttribute('position',new T.BufferAttribute(fireflyPositions,3));
  const fireflies=new T.Points(fireflyGeo,new T.PointsMaterial({color:0xffd987,size:.045,transparent:true,opacity:.85,blending:T.AdditiveBlending,depthWrite:false}));scene.add(fireflies);
- const cameraFade=createSceneryFade(Object.values(materials));
+ cameraFade.add(Object.values(materials));
  function installProps(kit){
   const prototype=new Map(),used=new Set();kit.updateMatrixWorld(true);
   for(const name of ['Torii','Shrine','Lantern','Crate','Rock']){
@@ -163,30 +163,37 @@ function buildGarden(scene){
 }
 
 export function buildWorld(scene){
- const before=new Set(scene.children),garden=buildGarden(scene),gardenNodes=new Set(scene.children.filter(o=>!before.has(o))),cache=new Map(),voyageKits={};
- const bamboo=createBambooGrove(garden.root,garden.solids);
- const clothSystems=new Map([['garden',createClothBanners('garden',garden.root,garden.solids,garden.cameraFade)]]);
- let streetResources=null;let harbourSnow=null;let stage=null;const originalBackground=scene.background,originalFog=scene.fog?.clone();
- const basin=new Proxy(garden.basin,{get(target,key){const value=target[key];if(typeof value==='function')return (...args)=>{if(!stage||key==='reset')return value(...args)};return value}});
- const world={basin,cameraFade:garden.cameraFade,
+ const cameraFade=createSceneryFade([]),gardenNodes=new Set(),cache=new Map(),voyageKits={},clothSystems=new Map();
+ const empty={root:new T.Group(),water:new T.Group(),solids:[],breakables:[]};
+ let garden=null,bamboo=null,streetResources=null,harbourSnow=null,stage=null;
+ const originalBackground=scene.background,originalFog=scene.fog?.clone();
+ function prepareGarden(){
+  if(garden)return;
+  const before=new Set(scene.children);garden=buildGarden(scene,cameraFade);
+  for(const node of scene.children)if(!before.has(node))gardenNodes.add(node);
+  bamboo=createBambooGrove(garden.root,garden.solids);
+  clothSystems.set('garden',createClothBanners('garden',garden.root,garden.solids,cameraFade));
+ }
+ const basin=new Proxy({}, {get(_target,key){return (...args)=>{if(garden&&(!stage||key==='reset'))return garden.basin[key]?.(...args)}}});
+ const world={basin,cameraFade,
   installStreet(resources){streetResources=resources},
   installVoyage(kits){Object.assign(voyageKits,kits)},
-  installProps(kit){const before=new Set(scene.children),result=garden.installProps(kit);for(const o of scene.children)if(!before.has(o))gardenNodes.add(o);return result},
-  select(kind='garden'){if(kind==='garden'){stage=null;bamboo.reset()}else{if(!cache.has(kind)){const next=kind==='lantern-street'?buildLanternStreet(garden.cameraFade,streetResources):kind==='shinkansen'?buildShinkansen(garden.cameraFade,voyageKits[kind]):buildVoyage(kind,garden.cameraFade,voyageKits[kind]);cache.set(kind,next);scene.add(next.root);if(kind==='harbour'){clothSystems.set(kind,createClothBanners(kind,next.root,next.solids,garden.cameraFade));harbourSnow=createHarbourSnow(next.root,next.solids)}}stage=cache.get(kind);stage.reset()}
+  installProps(kit){prepareGarden();const before=new Set(scene.children),result=garden.installProps(kit);for(const o of scene.children)if(!before.has(o))gardenNodes.add(o);return result},
+  select(kind='garden'){if(kind==='garden'){prepareGarden();stage=null;bamboo.reset()}else{if(!cache.has(kind)){const next=kind==='lantern-street'?buildLanternStreet(cameraFade,streetResources):kind==='shinkansen'?buildShinkansen(cameraFade,voyageKits[kind]):buildVoyage(kind,cameraFade,voyageKits[kind]);cache.set(kind,next);scene.add(next.root);if(kind==='harbour'){clothSystems.set(kind,createClothBanners(kind,next.root,next.solids,cameraFade));harbourSnow=createHarbourSnow(next.root,next.solids)}}stage=cache.get(kind);stage.reset()}
    clothSystems.get(kind)?.reset();if(kind==='harbour')harbourSnow?.reset();
    for(const o of gardenNodes)o.visible=!stage;for(const s of cache.values())s.root.visible=s===stage;
    scene.background=stage?.background||(stage?new T.Color(stage.kind==='shinkansen'?0x9aa9b4:stage.kind==='harbour'?0x596e8c:0x0b141d):originalBackground);scene.fog=stage?.fog||(stage?new T.FogExp2(stage.kind==='shinkansen'?0x9aa9b4:stage.kind==='harbour'?0x8294b0:0x182733,stage.kind==='shinkansen'?.0032:stage.kind==='harbour'?.0075:.015):originalFog?.clone());
   },
   get stage(){return stage?.kind||'garden'},get stageName(){return stage?.name||'The Rain Garden'},get weather(){return stage?.weather||'rain'},get stageState(){return {...(stage?.state||{kind:'garden'}),cloth:clothSystems.get(stage?.kind||'garden')?.state}},get bamboo(){return stage?null:bamboo},get snow(){return stage?.kind==='harbour'?harbourSnow:null},get cloth(){return clothSystems.get(stage?.kind||'garden')},
-  get root(){return stage?.root||garden.root},get water(){return stage?.water||garden.water},get solids(){return stage?.solids||garden.solids},get breakables(){return stage?.breakables||garden.breakables},
+  get root(){return stage?.root||garden?.root||empty.root},get water(){return stage?.water||garden?.water||empty.water},get solids(){return stage?.solids||garden?.solids||empty.solids},get breakables(){return stage?.breakables||garden?.breakables||empty.breakables},
   get spawn(){return stage?.spawn||V(0,0,8)},get bossSpawn(){return stage?.bossSpawn||V(0,.68,-12)},
-  floorAt(x,z,fromY){return stage?stage.floorAt(x,z,fromY):garden.floorAt(x,z)},
+  floorAt(x,z,fromY){return stage?stage.floorAt(x,z,fromY):(garden?.floorAt(x,z)??0)},
   isFatalFall(c){return stage?.isFatalFall?.(c)||false},ragdollSurfaceAt(x,z,fromY){return stage?.ragdollSurfaceAt?.(x,z,fromY)||null},get ragdollMaxSpeed(){return stage?.ragdollMaxSpeed||24},
   civilianBladeHits(a,b){return stage?.civilianBladeHits?.(a,b)||[]},hitCivilian(civilian){return stage?.hitCivilian?.(civilian)||false},
   cutCloth(a,b){return clothSystems.get(stage?.kind||'garden')?.cutSegment(a,b)||[]},
   interactCloth(dt,actors){clothSystems.get(stage?.kind||'garden')?.fixed(dt,actors);if(stage?.kind==='harbour')harbourSnow?.fixed(dt,actors)},
-  fixed(dt,actors){stage?.fixed(dt,actors,world);if(!stage)bamboo.fixed(dt)},velocity(c,v,dt){const result=stage?stage.velocity(c,v,dt):v;if(stage?.kind==='harbour'&&c.grounded&&harbourSnow?.sample(c.pos.x,c.pos.z,c.pos.y)>.035)result.multiplyScalar(.91);return result},groundImpact(p,heavy){return stage?.groundImpact(p,heavy)||false},
-  update(time,dt){if(stage)stage.update(time,dt);else garden.update(time,dt);clothSystems.get(stage?.kind||'garden')?.upload();if(stage?.kind==='harbour')harbourSnow?.upload()},
-  reset(){garden.reset();bamboo.reset();harbourSnow?.reset();for(const s of cache.values())s.reset();for(const c of clothSystems.values())c.reset()}
+  fixed(dt,actors){stage?.fixed(dt,actors,world);if(!stage)bamboo?.fixed(dt)},velocity(c,v,dt){const result=stage?stage.velocity(c,v,dt):v;if(stage?.kind==='harbour'&&c.grounded&&harbourSnow?.sample(c.pos.x,c.pos.z,c.pos.y)>.035)result.multiplyScalar(.91);return result},groundImpact(p,heavy){return stage?.groundImpact(p,heavy)||false},
+  update(time,dt){if(stage)stage.update(time,dt);else garden?.update(time,dt);clothSystems.get(stage?.kind||'garden')?.upload();if(stage?.kind==='harbour')harbourSnow?.upload()},
+  reset(){garden?.reset();bamboo?.reset();harbourSnow?.reset();for(const s of cache.values())s.reset();for(const c of clothSystems.values())c.reset()}
  };return world;
 }
