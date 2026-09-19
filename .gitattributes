@@ -1,0 +1,6 @@
+* text=auto
+*.glb binary
+*.webp binary
+*.mp3 binary
+*.ogg binary
+*.wav binary

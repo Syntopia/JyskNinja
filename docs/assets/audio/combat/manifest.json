@@ -1,0 +1,541 @@
+{
+  "license": "CC0-1.0",
+  "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "sources": {
+    "bamboo": {
+      "author": "Iwan \u2018qubodup\u2019 Gabovitch",
+      "url": "https://opengameart.org/content/swish-bamboo-stick-weapon-swhoshes"
+    },
+    "punch": {
+      "author": "Iwan \u2018qubodup\u2019 Gabovitch",
+      "url": "https://opengameart.org/content/punch"
+    },
+    "steel": {
+      "author": "StarNinjas",
+      "url": "https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes"
+    },
+    "body": {
+      "author": "Independent.nu",
+      "url": "https://opengameart.org/content/37-hitspunches"
+    }
+  },
+  "processing": "Mono fold-down, light bandpass filtering, silence trim, gain matching with -2 dBFS peak ceiling, short edge fades, 44.1 kHz PCM16. No synthetic layers added.",
+  "banks": {
+    "slash": [
+      "slash-01.wav",
+      "slash-02.wav",
+      "slash-03.wav",
+      "slash-04.wav",
+      "slash-05.wav",
+      "slash-06.wav"
+    ],
+    "heavy": [
+      "heavy-01.wav",
+      "heavy-02.wav",
+      "heavy-03.wav",
+      "heavy-04.wav",
+      "heavy-05.wav",
+      "heavy-06.wav"
+    ],
+    "hit": [
+      "hit-01.wav",
+      "hit-02.wav",
+      "hit-03.wav",
+      "hit-04.wav",
+      "hit-05.wav"
+    ],
+    "clash": [
+      "clash-01.wav",
+      "clash-02.wav",
+      "clash-03.wav",
+      "clash-04.wav",
+      "clash-05.wav",
+      "clash-06.wav"
+    ],
+    "body": [
+      "body-01.wav",
+      "body-02.wav",
+      "body-03.wav",
+      "body-04.wav",
+      "body-05.wav"
+    ]
+  },
+  "files": [
+    {
+      "file": "slash-01.wav",
+      "source": "bamboo",
+      "original": "swosh-02.flac",
+      "sourceSHA256": "6148210eed26653d305eedc7f43e0f623864d434f0f4d8e3a540f623a823ff26",
+      "duration": 0.2022,
+      "peak": 0.3415,
+      "rms": 0.0945,
+      "trimSeconds": [
+        0.0,
+        0.2022
+      ],
+      "bandpassHz": [
+        150,
+        11000
+      ]
+    },
+    {
+      "file": "slash-02.wav",
+      "source": "bamboo",
+      "original": "swosh-06.flac",
+      "sourceSHA256": "9d21a424c5ff4b8b11974e80f5f051ea3526cc97e41f3dd7494b7037c09ec454",
+      "duration": 0.2768,
+      "peak": 0.4809,
+      "rms": 0.0945,
+      "trimSeconds": [
+        0.0,
+        0.2768
+      ],
+      "bandpassHz": [
+        150,
+        11000
+      ]
+    },
+    {
+      "file": "slash-03.wav",
+      "source": "bamboo",
+      "original": "swosh-07.flac",
+      "sourceSHA256": "2c33fea0dd6daed6e68e39d13be78d90455698650415d54a9af3fdfb3f1437b2",
+      "duration": 0.31,
+      "peak": 0.6765,
+      "rms": 0.095,
+      "trimSeconds": [
+        0.0019,
+        0.3119
+      ],
+      "bandpassHz": [
+        150,
+        11000
+      ]
+    },
+    {
+      "file": "slash-04.wav",
+      "source": "bamboo",
+      "original": "swosh-09.flac",
+      "sourceSHA256": "df11094a3a0e071e10c78ab4aa79102b22c5efbe62bccec409dac62f2e4540b0",
+      "duration": 0.1858,
+      "peak": 0.4154,
+      "rms": 0.0933,
+      "trimSeconds": [
+        0.0,
+        0.1858
+      ],
+      "bandpassHz": [
+        150,
+        11000
+      ]
+    },
+    {
+      "file": "slash-05.wav",
+      "source": "bamboo",
+      "original": "swosh-18.flac",
+      "sourceSHA256": "039d324c5e3625ae58dc08743ee119bcc4d8e41a229c37aa329b647ce44aadff",
+      "duration": 0.2624,
+      "peak": 0.6373,
+      "rms": 0.095,
+      "trimSeconds": [
+        0.0049,
+        0.2673
+      ],
+      "bandpassHz": [
+        150,
+        11000
+      ]
+    },
+    {
+      "file": "slash-06.wav",
+      "source": "bamboo",
+      "original": "swosh-25.flac",
+      "sourceSHA256": "0740d9ba253e7923b4d5b7b7361ba06a5259aea20070b31c54b6e4e37d3db212",
+      "duration": 0.2414,
+      "peak": 0.5588,
+      "rms": 0.095,
+      "trimSeconds": [
+        0.0141,
+        0.2555
+      ],
+      "bandpassHz": [
+        150,
+        11000
+      ]
+    },
+    {
+      "file": "heavy-01.wav",
+      "source": "bamboo",
+      "original": "swosh-13.flac",
+      "sourceSHA256": "a22c0da4eff26f4b6171721c830f291a0ad9fe5383f23d5f4530020e995dc4de",
+      "duration": 0.5111,
+      "peak": 0.551,
+      "rms": 0.115,
+      "trimSeconds": [
+        0.0,
+        0.5111
+      ],
+      "bandpassHz": [
+        95,
+        10500
+      ]
+    },
+    {
+      "file": "heavy-02.wav",
+      "source": "bamboo",
+      "original": "swosh-15.flac",
+      "sourceSHA256": "a32817276bb9b6029a4c04c9c80ce9cfcb5d11a143b243e57a8187a0a0032ebf",
+      "duration": 0.292,
+      "peak": 0.7123,
+      "rms": 0.115,
+      "trimSeconds": [
+        0.027,
+        0.319
+      ],
+      "bandpassHz": [
+        95,
+        10500
+      ]
+    },
+    {
+      "file": "heavy-03.wav",
+      "source": "bamboo",
+      "original": "swosh-20.flac",
+      "sourceSHA256": "a1c28eddda0cc420159805dc8876fa0938ba1b1a36e6d6159b6bb034ca69d79c",
+      "duration": 0.2341,
+      "peak": 0.79,
+      "rms": 0.1062,
+      "trimSeconds": [
+        0.0218,
+        0.2559
+      ],
+      "bandpassHz": [
+        95,
+        10500
+      ]
+    },
+    {
+      "file": "heavy-04.wav",
+      "source": "bamboo",
+      "original": "swosh-26.flac",
+      "sourceSHA256": "7159ba26b74840da53965989c1472807891298528f94d720119777c251b3109e",
+      "duration": 0.326,
+      "peak": 0.5915,
+      "rms": 0.115,
+      "trimSeconds": [
+        0.0107,
+        0.3366
+      ],
+      "bandpassHz": [
+        95,
+        10500
+      ]
+    },
+    {
+      "file": "heavy-05.wav",
+      "source": "bamboo",
+      "original": "swosh-36.flac",
+      "sourceSHA256": "2dc4925b516babed6d19c8538604b906251b1b84304f537ad4ad91466aaecc40",
+      "duration": 0.3021,
+      "peak": 0.6625,
+      "rms": 0.115,
+      "trimSeconds": [
+        0.0312,
+        0.3332
+      ],
+      "bandpassHz": [
+        95,
+        10500
+      ]
+    },
+    {
+      "file": "heavy-06.wav",
+      "source": "bamboo",
+      "original": "swosh-39.flac",
+      "sourceSHA256": "ba8b1d58030abd7c6aa9146d7781429e5b4d16e6853cdfe954c2db8d459f58a1",
+      "duration": 0.4036,
+      "peak": 0.5368,
+      "rms": 0.115,
+      "trimSeconds": [
+        0.0252,
+        0.4288
+      ],
+      "bandpassHz": [
+        95,
+        10500
+      ]
+    },
+    {
+      "file": "hit-01.wav",
+      "source": "punch",
+      "original": "qubodupPunch01.flac",
+      "sourceSHA256": "7504bc5cf7c605ea4a9158142956d17e4f544998e7c2cf272414c72334e6941a",
+      "duration": 0.3364,
+      "peak": 0.79,
+      "rms": 0.0731,
+      "trimSeconds": [
+        0.0,
+        0.3364
+      ],
+      "bandpassHz": [
+        45,
+        9000
+      ]
+    },
+    {
+      "file": "hit-02.wav",
+      "source": "punch",
+      "original": "qubodupPunch02.flac",
+      "sourceSHA256": "26358dd4ddf515a427e493bd9d7e56ac1b98f42c18909f5d48a8af87c0a8f5bb",
+      "duration": 0.3207,
+      "peak": 0.79,
+      "rms": 0.1023,
+      "trimSeconds": [
+        0.0017,
+        0.3224
+      ],
+      "bandpassHz": [
+        45,
+        9000
+      ]
+    },
+    {
+      "file": "hit-03.wav",
+      "source": "punch",
+      "original": "qubodupPunch03.flac",
+      "sourceSHA256": "bd4dbe17d82280a98e6c32f0ffa9a9693b7252d20d0982fba729eca5eb3c84aa",
+      "duration": 0.3318,
+      "peak": 0.79,
+      "rms": 0.0667,
+      "trimSeconds": [
+        0.0,
+        0.3318
+      ],
+      "bandpassHz": [
+        45,
+        9000
+      ]
+    },
+    {
+      "file": "hit-04.wav",
+      "source": "punch",
+      "original": "qubodupPunch04.flac",
+      "sourceSHA256": "3a5882d72d4866ecfad2a4457c2582ef4254765d9a7f86e987917d4d60e92679",
+      "duration": 0.3277,
+      "peak": 0.79,
+      "rms": 0.0983,
+      "trimSeconds": [
+        0.0,
+        0.3277
+      ],
+      "bandpassHz": [
+        45,
+        9000
+      ]
+    },
+    {
+      "file": "hit-05.wav",
+      "source": "punch",
+      "original": "qubodupPunch05.flac",
+      "sourceSHA256": "e92853a04ae3e2fdab02f7287a9626bf84dc57dd5076cc5397ea2046df46c93f",
+      "duration": 0.3454,
+      "peak": 0.79,
+      "rms": 0.0749,
+      "trimSeconds": [
+        0.0,
+        0.3454
+      ],
+      "bandpassHz": [
+        45,
+        9000
+      ]
+    },
+    {
+      "file": "clash-01.wav",
+      "source": "steel",
+      "original": "sword_clash.1.ogg",
+      "sourceSHA256": "5c5e78e466ba78fe2414f2b7a2a6eb674822ccfc8a8bc9fda32be22f5dde5e69",
+      "duration": 0.3678,
+      "peak": 0.6232,
+      "rms": 0.095,
+      "trimSeconds": [
+        0.1549,
+        0.5227
+      ],
+      "bandpassHz": [
+        180,
+        10000
+      ]
+    },
+    {
+      "file": "clash-02.wav",
+      "source": "steel",
+      "original": "sword_clash.2.ogg",
+      "sourceSHA256": "e09f222b70d53f2967514d076e2ae50c21526ac640fe4919965f964af043da1a",
+      "duration": 0.2291,
+      "peak": 0.6142,
+      "rms": 0.095,
+      "trimSeconds": [
+        0.0261,
+        0.2552
+      ],
+      "bandpassHz": [
+        180,
+        10000
+      ]
+    },
+    {
+      "file": "clash-03.wav",
+      "source": "steel",
+      "original": "sword_clash.3.ogg",
+      "sourceSHA256": "6c588bc79b7e4fe202e3b65fa849954d684d2d2342f6ad04813540854c421663",
+      "duration": 0.2677,
+      "peak": 0.6476,
+      "rms": 0.095,
+      "trimSeconds": [
+        0.1043,
+        0.372
+      ],
+      "bandpassHz": [
+        180,
+        10000
+      ]
+    },
+    {
+      "file": "clash-04.wav",
+      "source": "steel",
+      "original": "sword_clash.5.ogg",
+      "sourceSHA256": "09e36369f2556e6a234ce78ec797447518ef7671f8224fc64747a7fa66ea229a",
+      "duration": 0.2142,
+      "peak": 0.6851,
+      "rms": 0.095,
+      "trimSeconds": [
+        0.1247,
+        0.3389
+      ],
+      "bandpassHz": [
+        180,
+        10000
+      ]
+    },
+    {
+      "file": "clash-05.wav",
+      "source": "steel",
+      "original": "sword_clash.8.ogg",
+      "sourceSHA256": "1466349e10779cfede4538657031bd87f3757d6cf5139cfad6552fa859007172",
+      "duration": 0.1601,
+      "peak": 0.7867,
+      "rms": 0.095,
+      "trimSeconds": [
+        0.1426,
+        0.3027
+      ],
+      "bandpassHz": [
+        180,
+        10000
+      ]
+    },
+    {
+      "file": "clash-06.wav",
+      "source": "steel",
+      "original": "sword_clash.9.ogg",
+      "sourceSHA256": "aabd55ad99a1d171b50d741923077488a1021460fab35adf4fb7f36def49adc0",
+      "duration": 0.5738,
+      "peak": 0.79,
+      "rms": 0.0637,
+      "trimSeconds": [
+        0.1684,
+        0.7422
+      ],
+      "bandpassHz": [
+        180,
+        10000
+      ]
+    },
+    {
+      "file": "body-01.wav",
+      "source": "body",
+      "original": "hit01.mp3.flac",
+      "sourceSHA256": "bdab6cd6c1d261efc363da24e205372daa88718b98bb149677d74459b24245d8",
+      "duration": 0.4894,
+      "peak": 0.7726,
+      "rms": 0.13,
+      "trimSeconds": [
+        0.1278,
+        0.6171
+      ],
+      "bandpassHz": [
+        35,
+        5500
+      ]
+    },
+    {
+      "file": "body-02.wav",
+      "source": "body",
+      "original": "hit03.mp3.flac",
+      "sourceSHA256": "b97c1246a9b3c02f1d0e0ce6ce0f36a407de32ff912c00c1ddadcf0b8196235e",
+      "duration": 0.5607,
+      "peak": 0.79,
+      "rms": 0.1098,
+      "trimSeconds": [
+        0.0376,
+        0.5983
+      ],
+      "bandpassHz": [
+        35,
+        5500
+      ]
+    },
+    {
+      "file": "body-03.wav",
+      "source": "body",
+      "original": "hit07.mp3.flac",
+      "sourceSHA256": "fd0bddacf2daf2041be7196d1569b91cec2188ebdc66dc8bbf508f58c4d9baa4",
+      "duration": 0.5609,
+      "peak": 0.6718,
+      "rms": 0.13,
+      "trimSeconds": [
+        0.0841,
+        0.6449
+      ],
+      "bandpassHz": [
+        35,
+        5500
+      ]
+    },
+    {
+      "file": "body-04.wav",
+      "source": "body",
+      "original": "hit10.mp3.flac",
+      "sourceSHA256": "1a1f4bec8fed5a1b785b9d43b335fa1cf99efcb85cf37507482f32e75a052265",
+      "duration": 0.2747,
+      "peak": 0.6883,
+      "rms": 0.13,
+      "trimSeconds": [
+        0.049,
+        0.3237
+      ],
+      "bandpassHz": [
+        35,
+        5500
+      ]
+    },
+    {
+      "file": "body-05.wav",
+      "source": "body",
+      "original": "hit12.mp3.flac",
+      "sourceSHA256": "52525f064961a3bd752da87fb80a61399a05850a48976733ff623e0c3a91e444",
+      "duration": 0.3236,
+      "peak": 0.739,
+      "rms": 0.13,
+      "trimSeconds": [
+        0.1293,
+        0.4529
+      ],
+      "bandpassHz": [
+        35,
+        5500
+      ]
+    }
+  ]
+}

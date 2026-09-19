@@ -1,0 +1,535 @@
+{
+  "name": "Samurai",
+  "originalFile": "samurai-rigged.glb",
+  "originalSHA256": "cfc3c66d853a0422c5e509eaa8535159b22b18e53884f2c7ee45f25c453af341",
+  "model": "retargeted.glb",
+  "jointCount": 52,
+  "mappedJointCount": 22,
+  "additionalFingerJoints": 30,
+  "triangleCount": 187096,
+  "textureSize": 2048,
+  "source": {
+    "name": "Quaternius Universal Animation Library — Standard",
+    "url": "https://quaternius.itch.io/universal-animation-library",
+    "license": "CC0 1.0",
+    "sha256": "cc73fc4e495b82958207316596317a3f40b9fa38065bde1027937452da537724"
+  },
+  "method": "Rest-pose to canonical T-pose alignment, world-space rotational transfer, parent-local reconstruction, leg-scaled pelvis motion and constant per-clip grounding",
+  "nativeToGameMap": {
+    "bone_0": "pelvis",
+    "bone_1": "spine1",
+    "bone_2": "spine2",
+    "bone_3": "spine3",
+    "bone_4": "neck",
+    "bone_5": "head",
+    "bone_6": "left_collar",
+    "bone_7": "left_shoulder",
+    "bone_8": "left_elbow",
+    "bone_9": "left_wrist",
+    "bone_25": "right_collar",
+    "bone_26": "right_shoulder",
+    "bone_27": "right_elbow",
+    "bone_28": "right_wrist",
+    "bone_44": "left_hip",
+    "bone_45": "left_knee",
+    "bone_46": "left_ankle",
+    "bone_47": "left_foot",
+    "bone_48": "right_hip",
+    "bone_49": "right_knee",
+    "bone_50": "right_ankle",
+    "bone_51": "right_foot"
+  },
+  "translationScale": 0.5165830179574139,
+  "displayScale": 1.8,
+  "swordSocketRotation": [
+    0.49259541358751624,
+    -0.5072965065178666,
+    -0.5072965282265294,
+    0.49259540738666663
+  ],
+  "motions": [
+    {
+      "id": "jumpStart",
+      "label": "Jump",
+      "category": "Locomotion",
+      "loop": false,
+      "description": "Takeoff",
+      "sourceClip": "Jump_Start",
+      "duration": 1.333,
+      "frames": 42,
+      "groundOffset": 0.520313966954969,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    },
+    {
+      "id": "jump",
+      "label": "Airborne",
+      "category": "Locomotion",
+      "loop": true,
+      "description": "Airborne loop",
+      "sourceClip": "Jump_Loop",
+      "duration": 2.5,
+      "frames": 76,
+      "groundOffset": 0.5179142267974137,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    },
+    {
+      "id": "land",
+      "label": "Landing",
+      "category": "Locomotion",
+      "loop": false,
+      "description": "Landing",
+      "sourceClip": "Jump_Land",
+      "duration": 1.267,
+      "frames": 39,
+      "groundOffset": 0.5119968556720801,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    },
+    {
+      "id": "death",
+      "label": "Defeated",
+      "category": "Reactions",
+      "loop": false,
+      "description": "Defeated",
+      "sourceClip": "Death01",
+      "duration": 2.4,
+      "frames": 74,
+      "groundOffset": 0.5486699800261055,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    },
+    {
+      "id": "guard",
+      "label": "Sword ready",
+      "category": "Combat",
+      "loop": true,
+      "description": "Sword guard",
+      "sourceClip": "Sword_Idle",
+      "duration": 1.667,
+      "frames": 51,
+      "groundOffset": 0.5128459291167721,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    },
+    {
+      "id": "hitHead",
+      "label": "Head hit",
+      "category": "Reactions",
+      "loop": false,
+      "description": "Head recoil",
+      "sourceClip": "Hit_Head",
+      "duration": 0.433,
+      "frames": 15,
+      "groundOffset": 0.5119235418929403,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    },
+    {
+      "id": "idle",
+      "label": "Ready",
+      "category": "Foundation",
+      "loop": true,
+      "description": "A relaxed standing loop.",
+      "sourceClip": "Idle_Loop",
+      "duration": 2.5,
+      "frames": 76,
+      "groundOffset": 0.5120697650550226,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    },
+    {
+      "id": "walk",
+      "label": "Walk",
+      "category": "Locomotion",
+      "loop": true,
+      "description": "A measured forward walk.",
+      "sourceClip": "Walk_Loop",
+      "duration": 1.333,
+      "frames": 42,
+      "groundOffset": 0.5180520064374087,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    },
+    {
+      "id": "jog",
+      "label": "Jog",
+      "category": "Locomotion",
+      "loop": true,
+      "description": "An easy running cadence.",
+      "sourceClip": "Jog_Fwd_Loop",
+      "duration": 0.933,
+      "frames": 30,
+      "groundOffset": 0.5222290684968333,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    },
+    {
+      "id": "sprint",
+      "label": "Sprint",
+      "category": "Locomotion",
+      "loop": true,
+      "description": "A fast forward sprint.",
+      "sourceClip": "Sprint_Loop",
+      "duration": 0.667,
+      "frames": 22,
+      "groundOffset": 0.5091918121410908,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    },
+    {
+      "id": "crouch",
+      "label": "Low guard",
+      "category": "Foundation",
+      "loop": true,
+      "description": "A crouched resting stance.",
+      "sourceClip": "Crouch_Idle_Loop",
+      "duration": 2.933,
+      "frames": 90,
+      "groundOffset": 0.5083775190237443,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    },
+    {
+      "id": "sneak",
+      "label": "Sneak",
+      "category": "Locomotion",
+      "loop": true,
+      "description": "A low, cautious forward walk.",
+      "sourceClip": "Crouch_Fwd_Loop",
+      "duration": 2,
+      "frames": 61,
+      "groundOffset": 0.5265066649638889,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    },
+    {
+      "id": "jab",
+      "label": "Jab",
+      "category": "Combat",
+      "loop": false,
+      "description": "A quick lead-hand strike.",
+      "sourceClip": "Punch_Jab",
+      "duration": 0.867,
+      "frames": 28,
+      "groundOffset": 0.5160410702881708,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    },
+    {
+      "id": "cross",
+      "label": "Cross",
+      "category": "Combat",
+      "loop": false,
+      "description": "A rear-hand cross punch.",
+      "sourceClip": "Punch_Cross",
+      "duration": 1,
+      "frames": 31,
+      "groundOffset": 0.5198735764458391,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    },
+    {
+      "id": "sword",
+      "label": "Sword swing",
+      "category": "Combat",
+      "loop": false,
+      "description": "The source sword-swing motion, with the katana drawn.",
+      "sourceClip": "Sword_Attack",
+      "duration": 1.533,
+      "frames": 47,
+      "groundOffset": 0.5236142854155974,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    },
+    {
+      "id": "roll",
+      "label": "Forward roll",
+      "category": "Combat",
+      "loop": false,
+      "description": "A compact forward evasive roll.",
+      "sourceClip": "Roll",
+      "duration": 1.467,
+      "frames": 46,
+      "groundOffset": 0.5316215764282588,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    },
+    {
+      "id": "hit",
+      "label": "Hit reaction",
+      "category": "Reactions",
+      "loop": false,
+      "description": "A chest-hit recoil.",
+      "sourceClip": "Hit_Chest",
+      "duration": 0.333,
+      "frames": 12,
+      "groundOffset": 0.5145206149869528,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    },
+    {
+      "id": "dance",
+      "label": "Victory dance",
+      "category": "Reactions",
+      "loop": true,
+      "description": "A looping celebratory dance.",
+      "sourceClip": "Dance_Loop",
+      "duration": 1,
+      "frames": 31,
+      "groundOffset": 0.5093252896187035,
+      "lowestSoleAfterOffset": 0,
+      "minimumSampledY": 0
+    }
+  ],
+  "limitations": [
+    "Sword-ready and sword-swing clips include a closed right-hand grip. Other clips preserve the open hand; the preview Sword toggle also controls the grip.",
+    "Sword is an optional viewer prop; no weapon was embedded in the supplied mesh.",
+    "Ladder/climb and ragdoll behaviour are procedural game systems, not clips in this library."
+  ],
+  "swordSocketPosition": [
+    0.011369061820080493,
+    0.055469349506853505,
+    -0.0491778478813123
+  ],
+  "swordGrip": {
+    "clips": [
+      "guard",
+      "sword"
+    ],
+    "wristOffset": [
+      0.020788258073552925,
+      0.7068011377511123,
+      1.957166524442133e-8,
+      0.7071067811865475
+    ],
+    "fingers": [
+      {
+        "name": "right_thumb_1",
+        "open": [
+          -0.2844001054763794,
+          0.29288777709007263,
+          0.275912344455719,
+          0.8701756596565247
+        ],
+        "closed": [
+          -0.10141870621219976,
+          0.3134913399034525,
+          -0.057244602035089735,
+          0.9424226659910221
+        ]
+      },
+      {
+        "name": "right_thumb_2",
+        "open": [
+          0.0425688810646534,
+          -0.1186101958155632,
+          0.033472537994384766,
+          0.9914631247520447
+        ],
+        "closed": [
+          -0.10522889461259051,
+          0.02902124821389363,
+          -0.027879319463708727,
+          0.9936334286028023
+        ]
+      },
+      {
+        "name": "right_thumb_3",
+        "open": [
+          0.0730772614479065,
+          -0.059720929712057114,
+          -0.13807621598243713,
+          0.9859148859977722
+        ],
+        "closed": [
+          -0.16704583970034434,
+          0.11347051119717495,
+          -0.20246520284082103,
+          0.9582421260652674
+        ]
+      },
+      {
+        "name": "right_index_1",
+        "open": [
+          8.115992322643706e-9,
+          -6.462325341516362e-9,
+          0.12412720918655396,
+          0.9922662973403931
+        ],
+        "closed": [
+          -0.45629451862825443,
+          0.07076077100595955,
+          0.1101021426509868,
+          0.880150977810122
+        ]
+      },
+      {
+        "name": "right_index_2",
+        "open": [
+          -3.15386183835642e-9,
+          3.7533318675286864e-9,
+          -0.1387011855840683,
+          0.9903342723846436
+        ],
+        "closed": [
+          -0.45728547794286617,
+          0.06404511278783344,
+          -0.12302945960631197,
+          0.8784372301192255
+        ]
+      },
+      {
+        "name": "right_index_3",
+        "open": [
+          -0.15811417996883392,
+          0.15811415016651154,
+          -0.025658458471298218,
+          0.9743415713310242
+        ],
+        "closed": [
+          -0.3652523501383448,
+          0.14881271949220404,
+          -0.059272415462251385,
+          0.9170235962073282
+        ]
+      },
+      {
+        "name": "right_middle_1",
+        "open": [
+          5.963362248451176e-9,
+          -3.1934654920462435e-9,
+          0.020950572565197945,
+          0.999780535697937
+        ],
+        "closed": [
+          -0.46116331146293243,
+          0.02324170765326846,
+          0.018583368985047893,
+          0.8868161486932158
+        ]
+      },
+      {
+        "name": "right_middle_2",
+        "open": [
+          -7.129929979754479e-10,
+          1.0526947091804573e-9,
+          -0.03564620390534401,
+          0.9993644952774048
+        ],
+        "closed": [
+          -0.46145516051429714,
+          0.01645956480645526,
+          -0.03161856645781585,
+          0.8864471128139901
+        ]
+      },
+      {
+        "name": "right_middle_3",
+        "open": [
+          -0.12126815319061279,
+          0.12126816064119339,
+          -0.014928837306797504,
+          0.9850711822509766
+        ],
+        "closed": [
+          -0.33160203380126607,
+          0.11516242349958418,
+          -0.04082220031958946,
+          0.9354738132912293
+        ]
+      },
+      {
+        "name": "right_ring_1",
+        "open": [
+          -0.03252638131380081,
+          0.03349711745977402,
+          -0.08652845025062561,
+          0.9951546788215637
+        ],
+        "closed": [
+          -0.48933853787353754,
+          0.003284379792751364,
+          -0.09177068303190922,
+          0.8672457263872922
+        ]
+      },
+      {
+        "name": "right_ring_2",
+        "open": [
+          0.03301531821489334,
+          -0.03301531821489334,
+          0.07188919186592102,
+          0.9963191747665405
+        ],
+        "closed": [
+          -0.43076405443937626,
+          -0.06247971880139927,
+          0.04852170713493437,
+          0.8989906885380738
+        ]
+      },
+      {
+        "name": "right_ring_3",
+        "open": [
+          3.725290076417309e-9,
+          -3.7252898543727042e-9,
+          1.839362262501254e-8,
+          1
+        ],
+        "closed": [
+          -0.21643961030111655,
+          -1.787183770286001e-8,
+          1.559900020000899e-8,
+          0.9762960079262335
+        ]
+      },
+      {
+        "name": "right_little_1",
+        "open": [
+          -0.030270177870988846,
+          0.031173579394817352,
+          -0.19767017662525177,
+          0.97930508852005
+        ],
+        "closed": [
+          -0.4815306440375049,
+          -0.05028913936339292,
+          -0.18931277025991602,
+          0.8542598646380569
+        ]
+      },
+      {
+        "name": "right_little_2",
+        "open": [
+          0.03072519786655903,
+          -0.03072519227862358,
+          0.18325191736221313,
+          0.9821052551269531
+        ],
+        "closed": [
+          -0.4262321349133788,
+          -0.11186992366159987,
+          0.14835911051700976,
+          0.8853252857982384
+        ]
+      },
+      {
+        "name": "right_little_3",
+        "open": [
+          -1.8626450382086546e-9,
+          -7.4505797087454084e-9,
+          -8.614734703371596e-9,
+          1
+        ],
+        "closed": [
+          -0.2164396157565952,
+          -2.3806896554507303e-8,
+          -8.760400580157734e-9,
+          0.9762960067167831
+        ]
+      }
+    ]
+  }
+}
