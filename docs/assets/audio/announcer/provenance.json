@@ -7,7 +7,7 @@
   "referenceText": "The battle begins. Face your destiny. Arm chop. Head chop. Victory. Defeated.",
   "selectedTake": "v2 natural retry, selected by creator on 2026-09-20",
   "processing": "Generated using an original text-designed voice reference. Near-silent outer padding trimmed, normalized to -18 LUFS, encoded as mono 48 kHz 160 kbps MP3. Natural pitch and tempo; no slowing or pitch shifting.",
-  "licenseNote": "The Qwen Space, VoiceDesign and Base models are Apache-2.0. This licenses code/models; generated audio is not automatically an Apache-licensed work. This is an original synthetic voice designed from text, not a clone of the ElevenLabs voice.",
+  "licenseNote": "The Qwen Space, VoiceDesign and Base models are Apache-2.0. This licenses code/models; generated audio is not automatically an Apache-licensed work. This is an original synthetic voice designed from text.",
   "clips": [
     {
       "id": "armchop",

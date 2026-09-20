@@ -1,2 +1,20 @@
+# OS metadata
 .DS_Store
 Thumbs.db
+
+# Local credentials and private tooling
+.env
+.env.*
+!.env.example
+.ssh/
+.codex/
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+known_hosts*
+
+# Local caches and debug output
+__pycache__/
+*.pyc
+*.log

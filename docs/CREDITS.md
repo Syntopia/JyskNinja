@@ -35,7 +35,7 @@ Credit: music created with [Suno](https://suno.com). Free-plan output is restric
 
 “Arm Chop”, “Head Chop”, “Victory” and “Defeated” use an original synthetic voice designed with [Qwen3-TTS VoiceDesign](https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign) and synthesized with [Qwen3-TTS Base](https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-Base) through the official Qwen Hugging Face Space. The creator selected the natural second takes; no pitch shift or slowdown is applied. No third-party voice recording was uploaded or cloned. [Generation provenance](assets/audio/announcer/provenance.json). The same original synthetic speaker introduces all five levels during loading; [level scripts and generation details](assets/audio/announcer/level-provenance.json).
 
-Both generation models use Apache-2.0; no model weights or inference code are shipped. That license covers the models/code, not an automatic Apache license grant for generated audio. These recordings replace the earlier ElevenLabs clips in this distribution.
+Both generation models use Apache-2.0; no model weights or inference code are shipped. That license covers the models/code, not an automatic Apache license grant for generated audio.
 
 ## Scope
 
