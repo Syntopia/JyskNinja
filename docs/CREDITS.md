@@ -31,12 +31,12 @@ The creator supplied these unchanged MP3s, generated on Suno's **free plan**:
 
 Credit: music created with [Suno](https://suno.com). Free-plan output is restricted to personal, non-commercial use; Suno expressly permits personal non-monetizing projects. Use must follow the applicable [terms](https://suno.com/terms), including permitted download channels. This repository does not grant independent reuse rights to these recordings. [Free-plan guidance](https://help.suno.com/en/articles/9601601).
 
-## Announcer voices — elevenlabs.io
+## Announcer voices — Qwen3-TTS
 
-“Arm Chop”, “Head Chop”, “Victory” and “Defeated” were created by the game creator with [elevenlabs.io](https://elevenlabs.io) on the **free plan**, supplied unchanged as `armchop.mp3`, `headchop.mp3`, `victory.mp3` and `defeated.mp3` in `assets/audio/announcer/`.
+“Arm Chop”, “Head Chop”, “Victory” and “Defeated” use an original synthetic voice designed with [Qwen3-TTS VoiceDesign](https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign) and synthesized with [Qwen3-TTS Base](https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-Base) through the official Qwen Hugging Face Space. The creator selected the natural second takes; no pitch shift or slowdown is applied. No third-party voice recording was uploaded or cloned. [Generation provenance](assets/audio/announcer/provenance.json).
 
-Free-plan output is non-commercial and requires title attribution to `elevenlabs.io` or `11.ai`; the game's browser title includes that credit. These recordings are not offered under an open-content license. Any separate publication must retain the applicable attribution and restrictions. [ElevenLabs publication guidance](https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform).
+Both generation models use Apache-2.0; no model weights or inference code are shipped. That license covers the models/code, not an automatic Apache license grant for generated audio. These recordings replace the earlier ElevenLabs clips in this distribution.
 
 ## Scope
 
-Reviewed against the shipped game and available provenance on 20 September 2026. This is a personal non-commercial project. The free-plan audio must not be treated as commercially licensed or as CC0/MIT content. Rights in supplied images, likenesses, voices and other inputs must also be respected. Tool and component licenses do not establish rights in every input or provide a legal clearance of the entire game.
+Reviewed against the shipped game and available provenance on 20 September 2026. This is a personal non-commercial project. The free-plan Suno music must not be treated as commercially licensed or as CC0/MIT content. Rights in supplied images, likenesses, voices and other inputs must also be respected. Tool and component licenses do not establish rights in every input or provide a legal clearance of the entire game.

@@ -1,12 +1,12 @@
-// User-supplied ElevenLabs performances. One voice at a time, at natural speed.
+// Creator-selected Qwen3-TTS v2 natural performances. One voice at a time, at natural speed.
 export function createAnnouncer(onSpeaking=()=>{}){
  const priorities={armchop:1,headchop:2,victory:3,defeated:4},clips={};
  let active=true,muted=false,current=null,lastChop=-Infinity,serial=0,error=null;const counts={};
  for(const kind of Object.keys(priorities)){
-  const audio=new Audio(new URL(`../assets/audio/announcer/${kind}.mp3`,import.meta.url).href);
+  const audio=new Audio(new URL(`../assets/audio/announcer/${kind}-qwen-natural-v2.mp3`,import.meta.url).href);
   audio.preload='auto';audio.volume=.88;clips[kind]=audio;
   audio.addEventListener('ended',()=>{if(current===kind){current=null;onSpeaking(false);}});
-  audio.addEventListener('error',()=>{error=`Could not load ${kind}.mp3`;console.error(error);if(current===kind)stop();});
+  audio.addEventListener('error',()=>{error=`Could not load ${kind}-qwen-natural-v2.mp3`;console.error(error);if(current===kind)stop();});
  }
  function stop(){serial++;for(const audio of Object.values(clips)){audio.pause();audio.currentTime=0;}current=null;onSpeaking(false);}
  function say(kind){

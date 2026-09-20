@@ -1,0 +1,45 @@
+{
+  "space": "Qwen/Qwen3-TTS",
+  "voiceModel": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "synthesisModel": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+  "modelLicense": "Apache-2.0",
+  "voiceDescription": "An elderly male cinematic announcer with an exceptionally deep basso profundo voice. Very low pitch, massive dark chest resonance, a rich rough gravel texture, and a heavy ominous presence. Speak slowly and deliberately, drawing out the vowels and leaving weighty spaces between words. Maintain the very low register throughout every phrase with descending endings. Controlled power, stern and menacing, spoken from the chest at a measured pace. Never raise the pitch to shout; no excited bright tenor sound. Clear English consonants, dry isolated solo voice, no music, no effects, no imitation of any real person.",
+  "referenceText": "The battle begins. Face your destiny. Arm chop. Head chop. Victory. Defeated.",
+  "selectedTake": "v2 natural retry, selected by creator on 2026-09-20",
+  "processing": "Generated using an original text-designed voice reference. Near-silent outer padding trimmed, normalized to -18 LUFS, encoded as mono 48 kHz 160 kbps MP3. Natural pitch and tempo; no slowing or pitch shifting.",
+  "licenseNote": "The Qwen Space, VoiceDesign and Base models are Apache-2.0. This licenses code/models; generated audio is not automatically an Apache-licensed work. This is an original synthetic voice designed from text, not a clone of the ElevenLabs voice.",
+  "clips": [
+    {
+      "id": "armchop",
+      "text": "Arm chop.",
+      "file": "armchop-qwen-natural-v2.mp3",
+      "sourceSeconds": 0.949,
+      "sourceSHA256": "5b5341dbdc4f7e2de9fbc2a460e9cafc5e3f1d7ad1c58bd3a66ea2d3a2c698bb",
+      "sha256": "be69c4aec3ff9ccb64eb2e6ca195596e628d2b661c31843903cd18813046bc0e"
+    },
+    {
+      "id": "headchop",
+      "text": "Head chop.",
+      "file": "headchop-qwen-natural-v2.mp3",
+      "sourceSeconds": 1.067,
+      "sourceSHA256": "432949f7fe56b99973ceddad3a5b465353fb6675602023506cfe1882c24331b4",
+      "sha256": "47468aff2f28c87cd1a715f3f45492546b64dedcea5245a56fe79c9efa589946"
+    },
+    {
+      "id": "victory",
+      "text": "Victory.",
+      "file": "victory-qwen-natural-v2.mp3",
+      "sourceSeconds": 0.931,
+      "sourceSHA256": "5e2c62f8d54a556671d965824ee1def72cae014e78a757e67a216ac545c9552d",
+      "sha256": "038beaf6e7e3c873b6f5dee602000ecd0b6b667f68030fbaeee6ce30000fba6b"
+    },
+    {
+      "id": "defeated",
+      "text": "Defeated.",
+      "file": "defeated-qwen-natural-v2.mp3",
+      "sourceSeconds": 1.02,
+      "sourceSHA256": "140638b20a380758df5bca67bd9b6eebd9b2e972379af10e0ddb2790f00a345e",
+      "sha256": "e7ef7f183fa8dc298fa99c874386a958b65a43d24f228423cfc8f9bb5bbb6ff7"
+    }
+  ]
+}
