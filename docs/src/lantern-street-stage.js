@@ -1,3 +1,4 @@
+import {prepareStreetGeometry} from './street-indexed-geometry.js';
 import {civilianBladeHits} from './civilian-combat.js';
 import {createStreetWetSurface} from './street-wet-surface.js';
 import * as T from 'three';
@@ -21,11 +22,8 @@ export function buildLanternStreet(cameraFade,resources){
  const batches=new Map(),remove=[];root.updateMatrixWorld(true);
  // Keep cloth and lantern nodes intact; batch static architecture by material.
  model.traverse(o=>{if(!o.isMesh)return;o.castShadow=true;o.receiveShadow=true;if(dynamicCategories.has(o.userData.category))return;
-  const g=o.geometry.clone().applyMatrix4(o.matrixWorld);const flat=g.index?g.toNonIndexed():g;
-  for(const key of Object.keys(flat.attributes))if(!['position','normal','uv'].includes(key))flat.deleteAttribute(key);
-  if(!flat.attributes.uv)flat.setAttribute('uv',new T.Float32BufferAttribute(new Float32Array(flat.attributes.position.count*2),2));
-  if(!flat.attributes.normal)flat.computeVertexNormals();
-  if(!batches.has(o.material))batches.set(o.material,[]);batches.get(o.material).push(flat);remove.push(o);
+  const geometry=prepareStreetGeometry(o.geometry,o.matrixWorld);
+  if(!batches.has(o.material))batches.set(o.material,[]);batches.get(o.material).push(geometry);remove.push(o);
  });
  for(const o of remove)o.removeFromParent();
  for(const [material,geometries] of batches){const mesh=new T.Mesh(mergeGeometries(geometries),material);mesh.castShadow=true;mesh.receiveShadow=true;root.add(mesh);for(const g of geometries)g.dispose()}
@@ -49,7 +47,7 @@ export function buildLanternStreet(cameraFade,resources){
   fixed(dt,actors){playerPosition=actors[0].pos;crowd.fixed(dt,actors.filter(a=>a.alive).map(a=>({x:a.pos.x,y:a.pos.y,z:a.pos.z,radius:a.enemy?.8:1.05})))},
   civilianBladeHits(a,b){return civilianBladeHits(crowd.flock.agents,a,b)},hitCivilian(civilian){return crowd.kill(civilian)},
   velocity(c,v){return v},groundImpact(){return false},
-  update(time,dt){wetSurface.update(time);dynamics.update(dt,playerPosition);crowd.update(playerPosition);lights(dt)},
+  update(time,dt,camera,viewportHeight){wetSurface.update(time);dynamics.update(dt,playerPosition);crowd.update(playerPosition,camera,viewportHeight);lights(dt)},
   reset(){wetSurface.reset();crowd.reset();dynamics.reset();lightClock=1},
   get state(){return {kind:'lantern-street',crowd:crowd.stats,dynamics:dynamics.stats,wetSurface:wetSurface.stats}}
  };

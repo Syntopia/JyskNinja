@@ -1,0 +1,136 @@
+{
+  "generated": "2026-09-20T14:59:09.434Z",
+  "method": "Attribute-aware LOD indices over a shared original vertex pool, rig, animations and material textures. Lossless Meshopt geometry encoding; no quantization.",
+  "assets": [
+    {
+      "id": "craftsman",
+      "source": "assets/craftsman/retargeted.glb",
+      "sourceSHA256": "118124ef09fdc9ae9e56cd95eaa23572bd76c6c52d65742f414471252a4670a4",
+      "file": "assets/crowd-lod/craftsman.glb",
+      "bytes": 7845064,
+      "levels": [
+        {
+          "level": 0,
+          "triangles": 144402,
+          "errorLimit": null,
+          "errors": []
+        },
+        {
+          "level": 1,
+          "target": 40000,
+          "triangles": 39998,
+          "errorLimit": 0.004,
+          "errors": [
+            0.0035819564945995808
+          ]
+        },
+        {
+          "level": 2,
+          "target": 12000,
+          "triangles": 23871,
+          "errorLimit": 0.008,
+          "errors": [
+            0.007937642745673656
+          ]
+        }
+      ],
+      "poseAwareSamples": 0,
+      "joints": 34,
+      "clips": [
+        "jumpStart",
+        "jump",
+        "land",
+        "death",
+        "guard",
+        "hitHead",
+        "idle",
+        "walk",
+        "jog",
+        "sprint",
+        "crouch",
+        "sneak",
+        "jab",
+        "cross",
+        "sword",
+        "roll",
+        "hit",
+        "dance"
+      ],
+      "textures": [
+        [
+          2048,
+          2048
+        ],
+        [
+          2048,
+          2048
+        ]
+      ]
+    },
+    {
+      "id": "female-worker",
+      "source": "assets/female-worker/retargeted.glb",
+      "sourceSHA256": "8ffcd6a0860e249dd5119d9464e2b2aa3325d427ce9899007b0e12854984f4f8",
+      "file": "assets/crowd-lod/female-worker.glb",
+      "bytes": 7121540,
+      "levels": [
+        {
+          "level": 0,
+          "triangles": 149085,
+          "errorLimit": null,
+          "errors": []
+        },
+        {
+          "level": 1,
+          "target": 40000,
+          "triangles": 85460,
+          "errorLimit": 0.0015,
+          "errors": [
+            0.001499101286754012
+          ]
+        },
+        {
+          "level": 2,
+          "target": 12000,
+          "triangles": 52032,
+          "errorLimit": 0.003,
+          "errors": [
+            0.002987999701872468
+          ]
+        }
+      ],
+      "poseAwareSamples": 7,
+      "joints": 52,
+      "clips": [
+        "jumpStart",
+        "jump",
+        "land",
+        "death",
+        "guard",
+        "hitHead",
+        "idle",
+        "walk",
+        "jog",
+        "sprint",
+        "crouch",
+        "sneak",
+        "jab",
+        "cross",
+        "sword",
+        "roll",
+        "hit",
+        "dance"
+      ],
+      "textures": [
+        [
+          2048,
+          2048
+        ],
+        [
+          2048,
+          2048
+        ]
+      ]
+    }
+  ]
+}

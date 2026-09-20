@@ -193,7 +193,7 @@ export function buildWorld(scene){
   cutCloth(a,b){return clothSystems.get(stage?.kind||'garden')?.cutSegment(a,b)||[]},
   interactCloth(dt,actors){clothSystems.get(stage?.kind||'garden')?.fixed(dt,actors);if(stage?.kind==='harbour')harbourSnow?.fixed(dt,actors)},
   fixed(dt,actors){stage?.fixed(dt,actors,world);if(!stage)bamboo?.fixed(dt)},velocity(c,v,dt){const result=stage?stage.velocity(c,v,dt):v;if(stage?.kind==='harbour'&&c.grounded&&harbourSnow?.sample(c.pos.x,c.pos.z,c.pos.y)>.035)result.multiplyScalar(.91);return result},groundImpact(p,heavy){return stage?.groundImpact(p,heavy)||false},
-  update(time,dt){if(stage)stage.update(time,dt);else garden?.update(time,dt);clothSystems.get(stage?.kind||'garden')?.upload();if(stage?.kind==='harbour')harbourSnow?.upload()},
+  update(time,dt,camera,viewportHeight){if(stage)stage.update(time,dt,camera,viewportHeight);else garden?.update(time,dt);clothSystems.get(stage?.kind||'garden')?.upload();if(stage?.kind==='harbour')harbourSnow?.upload()},
   reset(){garden?.reset();bamboo?.reset();harbourSnow?.reset();for(const s of cache.values())s.reset();for(const c of clothSystems.values())c.reset()}
  };return world;
 }

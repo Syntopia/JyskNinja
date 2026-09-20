@@ -24,6 +24,6 @@ for(const id of ['craftsman','female-worker']){
 }
 const crowd=createCivilianCrowd(assets,{count:96});assert.equal(crowd.stats.drawCalls,4);assert.equal(crowd.stats.carpenters,48);assert.equal(crowd.stats.femaleWorkers,48);
 for(const eyes of crowd.mesh.children.filter(m=>m.userData.workerEyes)){
- const body=crowd.mesh.children.find(m=>!m.userData.workerEyes&&m.name.split(' ')[0]===eyes.name.split(' ')[0]);assert.equal(eyes.instanceMatrix,body.instanceMatrix);assert.equal(eyes.count,body.count);assert.equal(eyes.geometry.attributes.crowdFade,body.geometry.attributes.crowdFade);
+ const body=crowd.mesh.children.find(m=>!m.userData.workerEyes&&m.name.split(' ')[0]===eyes.name.split(' ')[0]);assert.deepEqual(eyes.instanceMatrix.array,body.instanceMatrix.array);assert.equal(eyes.count,body.count);assert.deepEqual(eyes.geometry.attributes.crowdFade.array,body.geometry.attributes.crowdFade.array);
 }
 crowd.dispose();console.log('Both worker eyes match head animation in walk/death; crowd remains four instanced draws for 96 workers.');

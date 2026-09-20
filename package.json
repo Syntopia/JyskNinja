@@ -1,0 +1,8 @@
+{
+  "name": "jysk-ninja",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/loading.test.mjs && node tests/announcer.test.mjs && node tests/worker-eyes.test.mjs && node tests/crowd-lod.test.mjs && node tests/crowd-culling.test.mjs && node tests/street-indexed-geometry.test.mjs"
+  }
+}
