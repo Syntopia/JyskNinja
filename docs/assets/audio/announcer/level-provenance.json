@@ -1,0 +1,68 @@
+{
+  "space": "Qwen/Qwen3-TTS",
+  "synthesisModel": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+  "voiceModel": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "referenceText": "The battle begins. Face your destiny. Arm chop. Head chop. Victory. Defeated.",
+  "voiceDescription": "An elderly male cinematic announcer with an exceptionally deep basso profundo voice. Very low pitch, massive dark chest resonance, a rich rough gravel texture, and a heavy ominous presence. Speak slowly and deliberately, drawing out the vowels and leaving weighty spaces between words. Maintain the very low register throughout every phrase with descending endings. Controlled power, stern and menacing, spoken from the chest at a measured pace. Never raise the pitch to shout; no excited bright tenor sound. Clear English consonants, dry isolated solo voice, no music, no effects, no imitation of any real person.",
+  "modelLicense": "Apache-2.0",
+  "voice": "Creator-selected natural v2 voice; same generated reference as combat announcements",
+  "clips": [
+    {
+      "id": "garden",
+      "text": "The Rain Garden. Kyoto, Japan. Eighteen twenty.",
+      "rawFile": "garden-raw.wav",
+      "generationSeconds": 6.78,
+      "file": "level-garden-qwen-v1.mp3",
+      "seconds": 4.387,
+      "sha256": "6c6be5d4fce46357f64df7c5181c9db713463f194787703c526d3d279dbc10c6",
+      "integratedLUFS": "-18.45",
+      "truePeakDbTP": "-1.93"
+    },
+    {
+      "id": "lantern-street",
+      "text": "Lantern Street. Kyoto, Castle Quarter. Eighteen twenty.",
+      "rawFile": "lantern-street-raw.wav",
+      "generationSeconds": 7.84,
+      "file": "level-lantern-street-qwen-v1.mp3",
+      "seconds": 5.034,
+      "sha256": "e52e967e643258d9e3910384dfa244a4279c33ed3047257838720a57cd3c1f14",
+      "integratedLUFS": "-18.51",
+      "truePeakDbTP": "-1.92"
+    },
+    {
+      "id": "ferry",
+      "text": "The Night Ferry. Tsugaru Strait, Japan. Twenty thirty-six.",
+      "rawFile": "ferry-raw.wav",
+      "generationSeconds": 9.52,
+      "file": "level-ferry-qwen-v1.mp3",
+      "seconds": 5.352,
+      "sha256": "2796e04ced93e7bda858f0654662fe27b345c764f980de9be7ac0d6cf7f6cb89",
+      "integratedLUFS": "-18.61",
+      "truePeakDbTP": "-1.94"
+    },
+    {
+      "id": "harbour",
+      "text": "The Frozen Harbour. Hakodate, Hokkaido. Twenty thirty-six.",
+      "rawFile": "harbour-raw.wav",
+      "generationSeconds": 8.46,
+      "file": "level-harbour-qwen-v1.mp3",
+      "seconds": 4.925,
+      "sha256": "ddc477a5d4723973780cba49b3850436f5c126e8cf412743facdeee70d95b6b5",
+      "integratedLUFS": "-18.50",
+      "truePeakDbTP": "-1.93"
+    },
+    {
+      "id": "shinkansen",
+      "text": "The Last Express. Shizuoka, Japan. Twenty thirty-six.",
+      "rawFile": "shinkansen-raw.wav",
+      "generationSeconds": 10.3,
+      "file": "level-shinkansen-qwen-v1.mp3",
+      "seconds": 5.848,
+      "sha256": "29a6b470a46e81873af4311bc11b930e7cd1467994abcb57a75ada2c2a7bf884",
+      "integratedLUFS": "-18.45",
+      "truePeakDbTP": "-2.20"
+    }
+  ],
+  "processing": "Original selected synthetic reference uploaded to Qwen Base for consistent speaker identity. Trimmed near-silent outer padding; loudness normalized targeting -18 LUFS with final gain adjustment and at least 1 dB true-peak headroom; 48 kHz mono 160 kbps MP3. Natural pitch and tempo; no pitch shift or slowing.",
+  "licenseNote": "Qwen VoiceDesign and Base model/code licenses are Apache-2.0. No model weights are distributed. This is not an automatic Apache license grant for generated recordings. Original text-designed speaker; no third-party voice cloning."
+}

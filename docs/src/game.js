@@ -38,17 +38,9 @@ const loading=createLoadingUI(),assetRequests=trackLoadingManager(T.DefaultLoadi
 const modelPath=url=>url.replace(/^\.\//,'');
 const loadModel=url=>modelCache.get(modelPath(url),()=>new GLTFLoader().loadAsync('./'+modelPath(url)));
 async function readJSON(url){const response=await fetch(url);if(!response.ok)throw new Error(`Could not load ${url}: ${response.status}`);return response.json();}
-// Fictional campaign setting; shared by travel cards and direct scene entries.
-const sceneSettings={
- 'lantern-street':{year:1820,location:'Kyoto · Castle Quarter'},
- garden:{year:1820,location:'Kyoto · Japan'},
- ferry:{year:2036,location:'Tsugaru Strait · Japan'},
- harbour:{year:2036,location:'Hakodate · Hokkaido'},
- shinkansen:{year:2036,location:'Shizuoka · Japan'}
-};
 const bridgeAmbush=createBridgeAmbush();
 const requestedChapter=Math.max(1,CAMPAIGN.findIndex(s=>s.id===new URLSearchParams(location.search).get('scene'))+1);
-const sceneSetting=kind=>`${sceneSettings[kind].year} — ${sceneSettings[kind].location}`;
+const sceneSetting=kind=>{const chapter=CAMPAIGN.find(chapter=>chapter.id===kind);return `${chapter.year} — ${chapter.location}`;};
 const renderer=new T.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
 const scene=new T.Scene();scene.fog=new T.FogExp2(0x2e4857,.026);const camera=new T.PerspectiveCamera(53,innerWidth/innerHeight,.08,220);
 const ambientFill=new T.HemisphereLight(0xc6d7f1,0x465754,1.25);scene.add(ambientFill);const moonlight=new T.DirectionalLight(0xc6d8ff,2.3);moonlight.position.set(-16,25,-12);moonlight.castShadow=true;moonlight.shadow.mapSize.set(2048,2048);Object.assign(moonlight.shadow.camera,{left:-23,right:23,top:23,bottom:-23,near:.5,far:65});moonlight.shadow.bias=-.0002;moonlight.shadow.normalBias=.025;scene.add(moonlight,moonlight.target);const fill=new T.DirectionalLight(0xf6d2aa,.45);fill.position.set(8,9,16);scene.add(fill);
@@ -287,7 +279,7 @@ function spawnWave(){
  actors=[player,...enemies];for(const c of actors)c.setFabricWetness(world.stage==='ferry'?1:world.stage==='garden'?.35:0);const title=world.stageName;
  prepareSearchlight();banner(title,sceneSetting(world.stage),4.5);$('banner').classList.toggle('scene-intro',mode!=='transition');$('wave-title').textContent=CHAPTERS[wave-1]+' · '+title;document.querySelectorAll('.wave-marks i').forEach((n,i)=>n.classList.toggle('active',i<wave));
 }
-function reset({duringTravel=false,startWave=requestedChapter}={}){if(!duringTravel&&!preparedLevels.has(CAMPAIGN[startWave-1]?.id))return beginTravel({targetWave:startWave,restart:true});announcer.reset();clearTimeout(endTimer);endTimer=null;deathCinematic.reset();deathCameraTarget=null;cancelClimb(player);cancelLadder(player);player.climbApproach=null;clearRagdoll(player);accumulator=0;hitStop=0;clock.getDelta();impactPost.reset();graphics.reset();intro?.leave();storm.reset();impactFX.clear();restoreCharacter(player);for(const e of enemies)disposeEnemy(e);enemies=[];actors=[player];if(!duringTravel){travel=null;travelFX.finish();$('travel').classList.add('hidden')}$('banner').classList.remove('scene-intro');player.setFabricWetness(.35);wave=startWave-1;kills=0;nextWave=-1;combo=0;lastHit=-10;simTime=0;world.reset();Object.keys(stats).forEach(k=>stats[k]=0);player.pos.set(0,0,8);player.yaw=Math.PI;player.vy=0;player.hp=100;player.stamina=100;player.alive=true;player.root.visible=true;player.invuln=1;player.knock.set(0,0,0);player.grounded=true;enter(player,'idle');player.play('guard',0);camYaw=.0;camPitch=.3;camDistance=5.8;mode=duringTravel?'transition':'playing';syncMusic();keys.clear();pressed.clear();mouse.block=false;$('menu').classList.add('hidden');$('pause-menu').classList.add('hidden');$('hud').classList.remove('hidden');$('combo').textContent='';if(!duringTravel&&matchMedia('(pointer:coarse)').matches)$('touch-controls').classList.remove('hidden');spawnWave();updateCamera(1)}
+function reset({duringTravel=false,startWave=requestedChapter}={}){if(!duringTravel&&!preparedLevels.has(CAMPAIGN[startWave-1]?.id))return beginTravel({targetWave:startWave,restart:true});announcer.reset({preserveLevel:duringTravel});clearTimeout(endTimer);endTimer=null;deathCinematic.reset();deathCameraTarget=null;cancelClimb(player);cancelLadder(player);player.climbApproach=null;clearRagdoll(player);accumulator=0;hitStop=0;clock.getDelta();impactPost.reset();graphics.reset();intro?.leave();storm.reset();impactFX.clear();restoreCharacter(player);for(const e of enemies)disposeEnemy(e);enemies=[];actors=[player];if(!duringTravel){travel=null;travelFX.finish();$('travel').classList.add('hidden')}$('banner').classList.remove('scene-intro');player.setFabricWetness(.35);wave=startWave-1;kills=0;nextWave=-1;combo=0;lastHit=-10;simTime=0;world.reset();Object.keys(stats).forEach(k=>stats[k]=0);player.pos.set(0,0,8);player.yaw=Math.PI;player.vy=0;player.hp=100;player.stamina=100;player.alive=true;player.root.visible=true;player.invuln=1;player.knock.set(0,0,0);player.grounded=true;enter(player,'idle');player.play('guard',0);camYaw=.0;camPitch=.3;camDistance=5.8;mode=duringTravel?'transition':'playing';syncMusic();keys.clear();pressed.clear();mouse.block=false;$('menu').classList.add('hidden');$('pause-menu').classList.add('hidden');$('hud').classList.remove('hidden');$('combo').textContent='';if(!duringTravel&&matchMedia('(pointer:coarse)').matches)$('touch-controls').classList.remove('hidden');spawnWave();updateCamera(1)}
 function skipScene(){
  if(!ready||!player.alive||travel||!['playing','paused'].includes(mode))return;
  announcer.reset();beginTravel({targetWave:wave%CAMPAIGN.length+1});
@@ -307,8 +299,9 @@ function beginTravel({targetWave=wave+1,restart=false}={}){
  $('travel-copy').textContent=CHAPTERS[targetWave-1]+' · '+chapter.arrival;
  $('travel').classList.remove('hidden');$('travel').style.opacity=0;travelFX.begin(targetWave);syncMusic();
  const job=travel;assetRequests.clearErrors();loading.begin(`Loading ${chapter.title}`,preparedLevels.has(kind)?[]:LEVEL_MODELS[kind].filter(path=>!modelCache.has(path)));
+ announcer.announceLevel(kind);
  if(preparedLevels.has(kind))loading.prepare('Preparing scene');
- loadLevel(kind).then(()=>{if(travel===job)job.assetsReady=true}).catch(error=>{if(travel===job){job.error=true;loading.fail(error)}});
+ loadLevel(kind).then(()=>{if(travel===job)job.assetsReady=true}).catch(error=>{if(travel===job){job.error=true;announcer.stop();loading.fail(error)}});
 }
 function loadLevel(kind){
  return levelCache.get(kind,async()=>{
@@ -339,7 +332,7 @@ async function prepareLevelTransition(job){
   updateCamera(1);updateStageLighting(true);await renderer.compileAsync(scene,camera);
   if(travel!==job)return;
   preparedLevels.add(CAMPAIGN[job.targetWave-1].id);job.prepared=true;loading.finish();travelFX.requestIncoming();
- }catch(error){if(travel===job){job.error=true;loading.fail(error)}}
+ }catch(error){if(travel===job){job.error=true;announcer.stop();loading.fail(error)}}
 }
 function updateTravel(dt){
  if(!travel||document.hidden)return;
