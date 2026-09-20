@@ -7,7 +7,7 @@ export const modelSizes={
   "assets/harbour-refined.glb": 6265264,
   "assets/imported-ninja/retargeted.glb": 6619656,
   "assets/mech-boss.glb": 6363744,
-  "assets/ninja-game.glb": 4265840,
+  "assets/ninja-game.glb": 4266300,
   "assets/samurai/retargeted.glb": 9494420,
   "assets/scenes/lantern-street/lantern-street.glb": 8740888,
   "assets/shinkansen.glb": 3785184,

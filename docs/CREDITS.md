@@ -1,36 +1,42 @@
-# Jysk Ninja — credits and provenance
+# Jysk Ninja — credits and licenses
 
-## Announcer voices
+## Software and derived assets
 
-“Arm Chop”, “Head Chop”, “Victory” and “Defeated” were created by the game creator using **ElevenLabs** and supplied as MP3 files. They are bundled unchanged in `assets/audio/announcer/`. Original filenames: `armchop.mp3`, `headchop.mp3`, `victory.mp3`, `defeated.mp3`.
+Full notices are included with the distribution; retain them when redistributing the relevant components.
 
-## Music
+| Component | Credit and license |
+| --- | --- |
+| Three.js and bundled addons | © 2010–2025 three.js authors; [MIT](vendor/three/LICENSE). |
+| meshoptimizer decoder | © 2016–2026 Arseny Kapoulkine; [MIT](vendor/meshopt/LICENSE.md). |
+| SMAA shaders and lookup textures | Jorge Jimenez, Jose I. Echevarria, Belen Masia, Fernando Navarro and Diego Gutierrez; [SMAA license](licenses/SMAA.txt). Bundled through Three.js. |
+| LTC area-light lookup data | Eric Heitz, Jonathan Dupuy, Stephen Hill and David Neubelt; [license](licenses/LTC.txt). Reference: *Real-Time Polygonal-Light Shading with Linearly Transformed Cosines*, ACM Transactions on Graphics 35(4), SIGGRAPH 2016 ([project](https://eheitzresearch.wordpress.com/415-2/)). Bundled through Three.js. |
+| Original hero's face topology | Google / MediaPipe authors; [Apache-2.0](MediaPipe_LICENSE.txt). Derived from the [canonical face model](https://github.com/google-ai-edge/mediapipe/blob/master/mediapipe/modules/face_geometry/data/canonical_face_model.obj). Modified for this project: face reshaped from supplied portrait landmarks, textured, incorporated into a custom rigged character and compressed in `assets/web/ninja-game.glb`. |
+| Yuji Boku menu font | © 2021 The Yuji Project Authors; [SIL OFL 1.1](assets/fonts/OFL.txt). Modified by subsetting to the menu glyphs; distributed as `YujiBoku-Menu.ttf`. |
+| Retargeted character animations | Quaternius, [Universal Animation Library — Standard](https://quaternius.itch.io/universal-animation-library); [CC0 notice](ANIMATION_LICENSE.txt). Motions retargeted and adapted to the game's rigs. |
+| Recorded combat foley | Iwan “qubodup” Gabovitch, StarNinjas and Independent.nu; CC0. [Original sources and edits](assets/audio/combat/CREDITS.md). |
 
-Soundtrack created by the game creator using **Suno**. Supplied MP3 files are bundled unchanged:
+## Creation tools and generated art
 
-| Scene | Track | File |
-| --- | --- | --- |
-| Intro / 1 · Garden | 影の刃 | `assets/audio/kage-no-yaiba.mp3` |
-| 2 · Night Ferry | 凍戦の鼓動 | `assets/audio/tosen-no-kodo.mp3` |
-| 3 · Frozen Harbour | 影の鼓動 | `assets/audio/kage-no-kodo.mp3` |
-| 4 · Last Express | 影の刃 | `assets/audio/kage-no-yaiba.mp3` |
+Game code and procedural effects were developed with Codex. Environments and original character work were made in Blender; concept art and textures used OpenAI image generation. These are creation tools, not bundled application runtimes. Blender's GPL does not apply to exported artwork ([Blender license](https://www.blender.org/about/license/)); OpenAI output remains subject to its [terms](https://openai.com/policies/eu-terms-of-use/) and rights in any supplied references.
 
-These statements describe the creator-supplied provenance; they do not assign a new licence to the supplied voice or music recordings.
+The carpenter, female worker, warlord, samurai and masked ninja were generated/rigged through [kirikir13/image-to-rigged-3d](https://huggingface.co/spaces/kirikir13/image-to-rigged-3d), then edited or retargeted in the project. The service identifies Microsoft TRELLIS.2 and VAST-AI SkinTokens/TokenRig as MIT-licensed models. Its preprocessing uses [BRIA RMBG-2.0](https://huggingface.co/briaai/RMBG-2.0), whose public model license is CC BY-NC 4.0. This credits the generation pipeline, not an MIT license grant for all generated artwork. No generation model weights are shipped. Assets were packaged with glTF Transform, meshoptimizer and Sharp/WebP; only the meshoptimizer decoder is part of the browser runtime. Commercial use of that preprocessing workflow needs separate review.
 
-## 3D objects
+## Music — Suno
 
-All objects created with **Blender** using the **Codex App**.
+The creator supplied these unchanged MP3s, generated on Suno's **free plan**:
 
-## Game code
+- “影の刃” — `assets/audio/kage-no-yaiba.mp3`
+- “凍戦の鼓動” — `assets/audio/tosen-no-kodo.mp3`
+- “影の鼓動” — `assets/audio/kage-no-kodo.mp3`
 
-Created using **Codex GPT-6 Astra**.
+Credit: music created with [Suno](https://suno.com). Free-plan output is restricted to personal, non-commercial use; Suno expressly permits personal non-monetizing projects. Use must follow the applicable [terms](https://suno.com/terms), including permitted download channels. This repository does not grant independent reuse rights to these recordings. [Free-plan guidance](https://help.suno.com/en/articles/9601601).
 
-## Additional assets and libraries
+## Announcer voices — elevenlabs.io
 
-- Recorded combat foley by **Iwan “qubodup” Gabovitch**, **StarNinjas**, and **Independent.nu**, published under CC0. Detailed original-source links and edits: [combat audio credits](assets/audio/combat/CREDITS.md).
-- Generated image textures use **OpenAI image generation**. Texture source details and implementation notes are retained in the README and asset documentation.
-- Downloaded animation sources and licences: [animation credits](ANIMATION_LICENSE.txt).
-- **Three.js** and its bundled addons: [MIT licence](vendor/three/LICENSE).
-- Portrait landmark tooling: [MediaPipe licence](MediaPipe_LICENSE.txt).
+“Arm Chop”, “Head Chop”, “Victory” and “Defeated” were created by the game creator with [elevenlabs.io](https://elevenlabs.io) on the **free plan**, supplied unchanged as `armchop.mp3`, `headchop.mp3`, `victory.mp3` and `defeated.mp3` in `assets/audio/announcer/`.
 
-Gameplay geometry, simulations, rendering effects and audio mixing are implemented in the game code. The credit above for Blender describes the modelling workflow; runtime effects and procedural geometry are also generated by the game.
+Free-plan output is non-commercial and requires title attribution to `elevenlabs.io` or `11.ai`; the game's browser title includes that credit. These recordings are not offered under an open-content license. Any separate publication must retain the applicable attribution and restrictions. [ElevenLabs publication guidance](https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform).
+
+## Scope
+
+Reviewed against the shipped game and available provenance on 20 September 2026. This is a personal non-commercial project. The free-plan audio must not be treated as commercially licensed or as CC0/MIT content. Rights in supplied images, likenesses, voices and other inputs must also be respected. Tool and component licenses do not establish rights in every input or provide a legal clearance of the entire game.

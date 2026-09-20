@@ -1,5 +1,7 @@
-Track: 影の刃
-Source: user-supplied /Users/mikael/Downloads/影の刃.mp3
-Bundled as kage-no-yaiba.mp3, unchanged.
-Added at the user's request as the game's looping soundtrack.
-No third-party license or public redistribution rights were supplied.
+Music created by the game creator using Suno's free plan:
+- 影の刃 — kage-no-yaiba.mp3
+- 凍戦の鼓動 — tosen-no-kodo.mp3
+- 影の鼓動 — kage-no-kodo.mp3
+Supplied MP3s are bundled unchanged for this personal non-commercial game.
+Subject to Suno's terms; no commercial or blanket reuse license is granted.
+See ../../CREDITS.md for source, license and attribution details.
